@@ -26,9 +26,10 @@ DB_PASS = os.getenv('DB_PASS')
 
 # print(DB_PASS)
 
-BCB_df = pd.read_csv('../Data/SVI2018_US.csv',sep=',',lineterminator='\r',header=0,encoding='latin1',low_memory=False)
-
-
+SVI2018_df = pd.read_csv('../Data/SVI2018_US.csv',sep=',',lineterminator='\r',header=0,encoding='latin1',low_memory=False)
+Texas_county_df = pd.read_csv('../Data/Texas_COUNTY.csv',sep=',',lineterminator='\r',header=0,encoding='latin1',low_memory=False)
+texas_houston_df = pd.read_csv('../Data/Texas_Houston.csv',sep=',',lineterminator='\r',header=0,encoding='latin1',low_memory=False)
+texas_df = pd.read_csv('../Data/Texas.csv',sep=',',lineterminator='\r',header=0,encoding='latin1',low_memory=False)
 # ('Real_acct_owner/real_acct.txt', sep='\t',lineterminator='\r',header=0,encoding='latin1',low_memory=False)
 #doc = codecs.open('Real_acct_owner/real_acct.txt','rU','UTF-16')
 #real_acct_df = pd.read_csv(doc,sep='\t',header=1)
@@ -44,18 +45,8 @@ BCB_df = pd.read_csv('../Data/SVI2018_US.csv',sep=',',lineterminator='\r',header
 engine = create_engine(f'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/BCB')
 
 # # load df to database
-BCB_df.to_sql('BCB',engine,index=False,if_exists='append')
-# print('real_acct_df')
-# dept_df.to_sql('dept_emp',engine,index=False,if_exists='append')
-# print('dept_emp')
-# dept_manager_df.to_sql('dept_manager',engine,index=False,if_exists='append')
-# print('dept_manager')
-# employees_df.to_sql('employees',engine,index=False,if_exists='append')
-# print('employees')
-# salaries_df.to_sql('salaries',engine,index=False,if_exists='append')
-# print('salaries')
-# titles_df.to_sql('titles',engine,index=False,if_exists='append')
-# print('titles')
-# dept_df.to_sql('dept_emp',engine,index=False,if_exists='append')
-# print('dept_emp')
+SVI2018_df.to_sql('SVI2018_US',engine,index=False,if_exists='append')
+Texas_county_df.to_sql('TEXAS_COUNTY',engine,index=False,if_exists='append')
+texas_houston_df.to_sql('TEXAS_HOUSTON',engine,index=False,if_exists='append')
+texas_df.to_sql('TEXAS',engine,index=False,if_exists='append')
 
