@@ -1,1 +1,6 @@
-hi
+npm init -y 
+npm install pg
+
+to execute 
+npm insert.js
+

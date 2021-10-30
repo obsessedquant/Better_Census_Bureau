@@ -1,0 +1,16 @@
+{
+  "name": "henry",
+  "version": "1.0.0",
+  "main": "insert.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.7.1"
+  },
+  "description": ""
+}
