@@ -8,7 +8,11 @@ password: "samurai",
 port: "5432"
 })
 
-client.connect();
+client.connect()
+.then(() => console.log("Connected to postgres server"))
+.catch( e => console.log("Error connecting to postgres server"))
+.finally(() => client.end)
+
 
 client.query(`select * from "TEXAS" limit 10`, (err,res)=>{
     if(!err){
