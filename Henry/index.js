@@ -10,7 +10,7 @@ port: "5432"
 
 client.connect()
 .then(() => console.log("Connected to postgres server"))
-.catch( e => console.log("Error connecting to postgres server"))
+.catch( e => console.log(e))
 .finally(() => client.end)
 
 

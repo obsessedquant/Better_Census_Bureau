@@ -56,7 +56,8 @@
     "vary": "^1.1.2"
   },
   "scripts": {
-    "test": "node index.js"
+    "test": "node index.js",
+    "async": "node asyncFulltable.js"
   },
   "author": "henry",
   "license": "MIT"
