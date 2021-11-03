@@ -2,10 +2,6 @@
 #
 # conda install psycopg2 - PostgresSQL database adapter for Python
 #
-#
-#
-# 
-#
 
 import pandas as pd
 import os
@@ -30,14 +26,6 @@ SVI2018_df = pd.read_csv('../Data/SVI2018_US.csv',sep=',',lineterminator='\r',he
 Texas_county_df = pd.read_csv('../Data/Texas_COUNTY.csv',sep=',',lineterminator='\r',header=0,encoding='latin1',low_memory=False)
 texas_houston_df = pd.read_csv('../Data/Texas_Houston.csv',sep=',',lineterminator='\r',header=0,encoding='latin1',low_memory=False)
 texas_df = pd.read_csv('../Data/Texas.csv',sep=',',lineterminator='\r',header=0,encoding='latin1',low_memory=False)
-# ('Real_acct_owner/real_acct.txt', sep='\t',lineterminator='\r',header=0,encoding='latin1',low_memory=False)
-#doc = codecs.open('Real_acct_owner/real_acct.txt','rU','UTF-16')
-#real_acct_df = pd.read_csv(doc,sep='\t',header=1)
-#dept_df = pd.read_csv('data/dept_emp.csv')
-#dept_manager_df = pd.read_csv('data/dept_manager.csv')
-#employees_df = pd.read_csv('data/employees.csv')
-#salaries_df = pd.read_csv('data/salaries.csv')
-#titles_df = pd.read_csv('data/titles.csv')
 
 
 # # sqlachemy
