@@ -1,110 +1,60 @@
 // Store our API endpoint as queryUrl.
-// var geoJsonLocation = "C:\\Users\\srobi\\Group_Projects\\Better_Census_Bureau\\Data\\tx_2015_geojson.json";
-// var csvLocation = "C:\\Users\\srobi\\Group_Projects\\Better_Census_Bureau\\Data\\SVI2018_US.csv";
-var geoJsonLocation = "../Data/48.geojson";
-var csvLocation = "../Data/SVI2018_US.csv";
+
+var myMap = L.map("map", {
+  center: [29.7604, -95.3698],
+  zoom: 12
+});
+
+// Using this method requires an access token with mapbox.com
+var street = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenS...',
+  maxZoom: 18,
+  id: 'mapbox/streets-v11',
+  tileSize: 512,
+  zoomOffset: -1,
+  // accessToken: 'your.mapbox.access.token.here'
+  accessToken: 'pk.eyJ1Ijoic3JvYmluc29uMjI2IiwiYSI6ImNrdmh4OGczdWFrMmsydW9mdGViZjB4enYifQ.M7SwNQspK272zHmaVqumdA'
+}).addTo(myMap);
+
+// var topo = L.tileLayer('https://api.mapbox.com/v4/mapbox.terrain-rgb/{z}/{x}/{y}.pngraw?access_token={accessToken}', {
+//   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenS...',
+//   maxZoom: 18,
+//   id: 'mapbox/streets-v11',
+//   tileSize: 512,
+//   zoomOffset: -1,
+//   // accessToken: 'your.mapbox.access.token.here'
+//   accessToken: 'pk.eyJ1Ijoic3JvYmluc29uMjI2IiwiYSI6ImNrdmh4OGczdWFrMmsydW9mdGViZjB4enYifQ.M7SwNQspK272zHmaVqumdA'
+// }).addTo(myMap);
+
+var geoJsonLocation = "48.geojson";
+var csvLocation = "SVI2018_US.csv";
 
 d3.csv(csvLocation).then(function (data) {
   // Once we get a response, send the data.features object to the createFeatures function.
   console.log("csvLocation", data);
   d3.json(geoJsonLocation).then(function (jsonData) {
-      console.log("geoJsonLocation", jsonData);
-      // Once we get a response, send the data.features object to the createFeatures function.
-      // createFeatures(jsonData.features);
-      all_data = [];
-      var id = "";
-      var csvId = "";
-      jsonData.features.forEach(x=>{
-          id = x.properties.GEOID;
-          // if(id==="48201542301"){
-            csvId =  data.filter(y=>y.FIPS===id);
-            x.properties.EXTRA = csvId[0];
-            // console.log(x);
-            // console.log(csvId);
-            all_data.push(x);
+    console.log("geoJsonLocation", jsonData);
+    // Once we get a response, send the data.features object to the createFeatures function.
+    // createFeatures(jsonData.features);
+    all_data = [];
+    var id = "";
+    var csvId = "";
+    jsonData.features.forEach(x => {
+      id = x.properties.GEOID;
+      // if(id==="48201542301"){
+      csvId = data.filter(y => y.FIPS === id);
+      x.properties.EXTRA = csvId[0];
+      // console.log(x);
+      // console.log(csvId);
+      all_data.push(x);
 
-          // }
+      // }
 
-      });
-      console.log("all_data", all_data);
-      // 
     });
-    // createFeatures(data.features);
+    console.log("all_data", all_data);
+    // 
+  });
+  // createFeatures(data.features);
 });
 
-// var fileInput = document.getElementById("csv"),
 
-//     readFile = function () {
-//         var reader = new FileReader();
-//         reader.onload = function () {
-//             document.getElementById('out').innerHTML = reader.result;
-//         };
-//         // start reading the file. When it is done, calls the onload event defined above.
-//         reader.readAsBinaryString(fileInput.files[0]);
-//     };
-
-// fileInput.addEventListener('change', readFile);
-
-// // Perform a GET request to the query URL/
-// d3.json(queryUrl).then(function (data) {
-//   // Once we get a response, send the data.features object to the createFeatures function.
-//   createFeatures(data.features);
-// });
-
-// function createFeatures(earthquakeData) {
-
-//   // Define a function that we want to run once for each feature in the features array.
-//   // Give each feature a popup that describes the place and time of the earthquake.
-//   function onEachFeature(feature, layer) {
-//     layer.bindPopup(`<h3>${feature.properties.place}</h3><hr><p>${new Date(feature.properties.time)}</p>`);
-//   }
-
-//   // Create a GeoJSON layer that contains the features array on the earthquakeData object.
-//   // Run the onEachFeature function once for each piece of data in the array.
-//   var earthquakes = L.geoJSON(earthquakeData, {
-//     onEachFeature: onEachFeature
-//   });
-
-//   // Send our earthquakes layer to the createMap function/
-//   createMap(earthquakes);
-// }
-
-// function createMap(earthquakes) {
-
-//   // Create the base layers.
-//   var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-//   })
-
-//   var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-//     attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-//   });
-
-//   // Create a baseMaps object.
-//   var baseMaps = {
-//     "Street Map": street,
-//     "Topographic Map": topo
-//   };
-
-//   // Create an overlay object to hold our overlay.
-//   var overlayMaps = {
-//     Earthquakes: earthquakes
-//   };
-
-//   // Create our map, giving it the streetmap and earthquakes layers to display on load.
-//   var myMap = L.map("map", {
-//     center: [
-//       37.09, -95.71
-//     ],
-//     zoom: 5,
-//     layers: [street, earthquakes]
-//   });
-
-//   // Create a layer control.
-//   // Pass it our baseMaps and overlayMaps.
-//   // Add the layer control to the map.
-//   L.control.layers(baseMaps, overlayMaps, {
-//     collapsed: false
-//   }).addTo(myMap);
-
-// }
