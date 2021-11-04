@@ -35,7 +35,11 @@ d3.csv(csvLocation).then(function (data)
       //  console.log("x",x)
         all_data.push(x);
        });
-  //       console.log("all_data",all_data);
+
+  // console.log("all_data",all_data);
+  // the all_data list should have the data that we need to bind to the map
+    createFeatures(all_data);
+
     
      });
   });
@@ -88,8 +92,6 @@ function createFeatures(houstonData) {
           parseInt(feature.properties.EXTRA.E_TOTPOP));
         }
       }).addTo(myMap);
-  
-
 }
 
 
