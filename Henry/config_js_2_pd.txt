@@ -1,0 +1,32 @@
+
+how to install and configure node 
+https://youtu.be/ufdHsFClAk0
+
+npm init (creates package.json)
+
+(PythonData) Henrys-iMac:Henry henrywycislo$ npm init
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help init` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg>` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+package name: (query) js_postgres
+version: (1.0.0) 
+git repository: 
+keywords: 
+license: (MIT) MIT
+
+
+ 
+npm install pg
+npm install expres
+
+
+to execute 
+npm insert.js
+
