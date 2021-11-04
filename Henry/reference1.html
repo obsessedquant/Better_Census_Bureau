@@ -1,0 +1,586 @@
+<rss version="2.0">
+    <!-- app information -->
+    <appInfo>
+        <appTitle>Social Vulnerability Dashboard</appTitle>
+        <appSubtitle>A City of Houston MYR project ...</appSubtitle>
+        <appDesc>a prototype presentation framework</appDesc>
+        <appCredit>City of Houston - PDD GIS Mapping / HITS GIS Services</appCredit>
+        <appDisclaimer>This dashboard is prepared and made available for general reference purposes only and should not
+            be used, or relied upon for specific applications, without independent verification. The City of Houston
+            neither represents, nor warrants COHGIS data accuracy, or completeness, nor will the City of Houston accept
+            liability of any kind in conjunction with its use.</appDisclaimer>
+    </appInfo><!-- portal options -->
+    <mapPortals>
+        <mapPortal>
+            <mapPortalID>0</mapPortalID>
+            <mapPortalName>ArcGIS Online</mapPortalName>
+            <mapPortalURL>https://www.arcgis.com</mapPortalURL>
+        </mapPortal>
+        <mapPortal>
+            <mapPortalID>1</mapPortalID>
+            <mapPortalName>Another Portal</mapPortalName>
+            <mapPortalURL>https://whatever.houstontx.gov</mapPortalURL>
+        </mapPortal>
+    </mapPortals>
+    <!-- list of basemap options: dark-gray; dark-gray-vector; gray; gray-vector; hybrid; satellite; national-geographic; oceans; osm; streets; streets-navigation-vector; streets-night-vector; street-vector; terrain; topo; topo-vector -->
+    <baseMaps>
+        <baseMap>
+            <baseMapID>0</baseMapID>
+            <baseMapName>topo</baseMapName>
+        </baseMap>
+        <baseMap>
+            <baseMapID>1</baseMapID>
+            <baseMapName>gray</baseMapName>
+        </baseMap>
+        <baseMap>
+            <baseMapID>2</baseMapID>
+            <baseMapName>dark-gray</baseMapName>
+        </baseMap>
+        <baseMap>
+            <baseMapID>3</baseMapID>
+            <baseMapName>streets</baseMapName>
+        </baseMap>
+        <baseMap>
+            <baseMapID>4</baseMapID>
+            <baseMapName>satellite</baseMapName>
+        </baseMap>
+        <baseMap>
+            <baseMapID>5</baseMapID>
+            <baseMapName>streets-navigation-vector</baseMapName>
+        </baseMap>
+    </baseMaps><!-- catalog options -->
+    <mapcatalogs>
+        <mapcatalog>
+            <catalogID>0</catalogID>
+            <catalogName>Social Vulnerability Index</catalogName>
+            <catalogCode>SVI</catalogCode>
+            <catalogDesc>Social vulnerability refers to the resilience of communities when confronted by external
+                stresses on human health, stresses such as natural or human-caused disasters, or disease outbreaks.
+                Reducing social vulnerability can decrease both human suffering and economic loss. CDC Social
+                Vulnerability Index uses 15 U.S. census variables at tract level to help local officials identify
+                communities that may need support in preparing for hazards; or recovering from disaster. The Geospatial
+                Research, Analysis, and Services Program (GRASP) created and maintains CDC’s Social Vulnerability Index.
+            </catalogDesc>
+        </mapcatalog>
+        <mapcatalog>
+            <catalogID>1</catalogID>
+            <catalogName>Household</catalogName>
+            <catalogCode>HOUSEHOLD</catalogCode>
+            <catalogDesc>Whatever</catalogDesc>
+        </mapcatalog>
+        <mapcatalog>
+            <catalogID>2</catalogID>
+            <catalogName>Wealth, Income, and Education</catalogName>
+            <catalogCode>WEALTH</catalogCode>
+            <catalogDesc>Whatever</catalogDesc>
+        </mapcatalog>
+        <mapcatalog>
+            <catalogID>3</catalogID>
+            <catalogName>Children and Youth</catalogName>
+            <catalogCode>CHILDREN</catalogCode>
+            <catalogDesc>Whatever</catalogDesc>
+        </mapcatalog>
+        <mapcatalog>
+            <catalogID>4</catalogID>
+            <catalogName>Race, Ethnicity, and Language</catalogName>
+            <catalogCode>RACE</catalogCode>
+            <catalogDesc>Whatever</catalogDesc>
+        </mapcatalog>
+    </mapcatalogs><!-- map layers -->
+    <mapLayers>
+        <!-- MAPLAYER CONFIG NOTES -->
+        <!-- layerID must be in a sequence -->
+        <!-- layerGroupCode must be in one of catalogCode -->
+        <!-- layerDesc is optional; can be used as disclaimer -->
+        <!-- a mapLayer can be a feature layer or a web map -->
+        <!-- 	FEATURELAYER -->
+        <!--    	for a feature layer: make sure put "FEATURELAYER" in layerType and put feature layer URL in layerURL -->
+        <!--    	Its layerQuery, popupTitle, and popupContent are configurable -->
+        <!--    	popupTitle is a text string-->
+        <!--    	Use {item} to show the value of an item -->
+        <!--    	popupContent is a table-like popup -->
+        <!--    		"|" is used to separate items -->
+        <!--    		":" is used to separate item names and item values.  -->
+        <!--    		Strings of the popupContent will be parsed to a table-like format in the popup window -->
+        <!--    		Use {item} to show the value of an item -->
+        <!--    		An example:   "TRACT NAME : {TRACT} | POPULATION : {POP100}"   -->
+        <!--    		popupCentent cannot include any HTML tags or other special characters -->
+        <!-- 	PORTALITEM -->
+        <!--    	for a PORTALITEM: make sure put "PORTALITEM" in layerType and put Portl ID in layerURL.  -->
+        <!--    	PORTALITEMs do not use info in layerQuery, popupTitle, and popupContent -->
+        <!-- END MAPLAYER CONFIG NOTES -->
+        <mapLayer>
+            <layerID>0</layerID>
+            <layerName>- Select one</layerName>
+            <layerGroupCode>SVI</layerGroupCode>
+            <layerDesc>...</layerDesc>
+            <layerQuery />
+            <layerURL />
+            <layerType />
+            <sublayerID />
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>1</layerID>
+            <layerName>Overall SVI</layerName>
+            <layerGroupCode>SVI</layerGroupCode>
+            <layerDesc>"The Social Vulnerability Index uses U.S. Census data to determine the relative social
+                vulnerability of every census tract. The SVI ranks each tract on 15 social factors and groups them into
+                four related themes. Each tract receives a separate ranking for each of the four themes, as well as an
+                overall ranking" (CDC). SVI was originally intended to help public health officials direct assistance to
+                vulnerable communities before, during, and after an emergency disaster. The higher the percentile
+                ranking, the more vulnerable a community is estimated to be overall based on socio-economic status,
+                household composition and disability, minority status and language, and housing and transportation.
+                Conversely, the lower the percentile ranking, the less vulnerable a community is estimated to be overall
+                based on those same categories. More information can be found at:
+                https://www.atsdr.cdc.gov/placeandhealth/svi/index.html</layerDesc>
+            <layerQuery>COUNTY in (\'Harris\', \'Fort Bend\', \'Montgomery\')</layerQuery>
+            <layerURL>0999a418b9894c83a734a2892321151b</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>2</layerID>
+            <layerName>SVI - Housing/Transportation Theme</layerName>
+            <layerGroupCode>SVI</layerGroupCode>
+            <layerDesc>The Housing and Transportation Theme takes into account five social factors in estimating
+                vulnerability: 1) Multi-Unit Structures, 2) Mobile Homes, 3) Crowding, 4) No Vehicle, and 5) Group
+                Quarters. The higher the percentile ranking, the more vulnerable a community is in housing and
+                transportation across these factors generally. Conversely, the lower the percentile ranking, the less
+                vulnerable a community is estimated to be overall based on those same factors.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris\', \'Fort Bend\', \'Montgomery\')</layerQuery>
+            <layerURL>482c6b744d424711954ff418b474436a</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>14</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>3</layerID>
+            <layerName>SVI - Socioeconomic Theme</layerName>
+            <layerGroupCode>SVI</layerGroupCode>
+            <layerDesc>The Socio-Economic Theme takes into account four social factors in estimating vulnerability: 1)
+                Below Poverty, 2) Unemployed, 3) Income, and 4) No High School Diploma. The higher the percentile
+                ranking, the more vulnerable a community is socio-economically across these factors generally.
+                Conversely, the lower the percentile ranking, the less vulnerable a community is estimated to be overall
+                based on those same factors.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris\', \'Fort Bend\', \'Montgomery\')</layerQuery>
+            <layerURL>96a1e9f016cb4aebaf5dcb6ad2709efb</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>5</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>4</layerID>
+            <layerName>SVI - Household Composition/Disability Theme</layerName>
+            <layerGroupCode>SVI</layerGroupCode>
+            <layerDesc>The Household Composition and Disability Theme takes into account four social factors in
+                estimating vulnerability: 1) Aged 65 or Older, 2) Aged 17 or Younger, 3) Older than Age 5 with a
+                Disability, and 4) Single-Parent Household. The higher the percentile ranking, the more vulnerable a
+                community is in household composition and disability across these factors generally. Conversely, the
+                lower the percentile ranking, the less vulnerable a community is estimated to be overall based on those
+                same factors.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris\', \'Fort Bend\', \'Montgomery\')</layerQuery>
+            <layerURL>6dc1ae1fd5344def8d7d66419dfdd157</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>8</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>5</layerID>
+            <layerName>SVI - Minority/Language Theme</layerName>
+            <layerGroupCode>SVI</layerGroupCode>
+            <layerDesc>The Minority Status and Language Theme takes into account two social factors in estimating
+                vulnerability: 1) Minority Status and 2) Speaks English “Less than Well.” The higher the percentile
+                ranking, the more vulnerable a community is in minority status and English language ability across these
+                factors generally. Conversely, the lower the percentile ranking, the less vulnerable a community is
+                estimated to be overall based on those same factors.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris\', \'Fort Bend\', \'Montgomery\')</layerQuery>
+            <layerURL>989c5bea5fa046da8740f3600d6c9e88</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>11</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>6</layerID>
+            <layerName>Placeholder</layerName>
+            <layerGroupCode />
+            <layerDesc>...</layerDesc>
+            <layerQuery />
+            <layerURL />
+            <layerType />
+            <sublayerID />
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>7</layerID>
+            <layerName>Placeholder</layerName>
+            <layerGroupCode />
+            <layerDesc>...</layerDesc>
+            <layerQuery />
+            <layerURL />
+            <layerType />
+            <sublayerID />
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>8</layerID>
+            <layerName>Placeholder</layerName>
+            <layerGroupCode />
+            <layerDesc>...</layerDesc>
+            <layerQuery />
+            <layerURL />
+            <layerType />
+            <sublayerID />
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>9</layerID>
+            <layerName>Placeholder</layerName>
+            <layerGroupCode />
+            <layerDesc>...</layerDesc>
+            <layerQuery />
+            <layerURL />
+            <layerType />
+            <sublayerID />
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>10</layerID>
+            <layerName>- Select one</layerName>
+            <layerGroupCode>HOUSEHOLD</layerGroupCode>
+            <layerDesc>...</layerDesc>
+            <layerQuery />
+            <layerURL />
+            <layerType />
+            <sublayerID />
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>11</layerID>
+            <layerName>Living Arrangements</layerName>
+            <layerGroupCode>HOUSEHOLD</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about living arrangements of children and adults by age group. These are 5-year estimates shown by
+                tract, county, and state boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>679bbd97c4454a4c8fbd6cab79562080</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>12</layerID>
+            <layerName>Marital Status</layerName>
+            <layerGroupCode>HOUSEHOLD</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about current maritial status. Counts broken down by sex. These are 5-year estimates shown by tract,
+                county, and state boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>165fb3ab31f444a69645029b04579e30</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>13</layerID>
+            <layerName>Vehicle Availability</layerName>
+            <layerGroupCode>HOUSEHOLD</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about household size by number of vehicles available. These are 5-year estimates shown by tract, county,
+                and state boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>9a9e43ec1603446880c50d4ed1df2207</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>14</layerID>
+            <layerName>Health Insurance</layerName>
+            <layerGroupCode>HOUSEHOLD</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about health insurance coverage by type and by age group. These are 5-year estimates shown by tract
+                boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>a1574f4bb84f4da78b60fa0c8616eaa1</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>15</layerID>
+            <layerName>Housing Costs</layerName>
+            <layerGroupCode>HOUSEHOLD</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about housing costs as a percentage of household income. These are 5-year estimates shown by tract
+                boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>9c7647840d6540e4864d205bac505027</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>16</layerID>
+            <layerName>Median Age</layerName>
+            <layerGroupCode>HOUSEHOLD</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about median age broken down by sex and race. These are 5-year estimates shown by tract, county, and
+                state boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>d227d6a4ee3e4d2d87eb9843ee14dd87</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>17</layerID>
+            <layerName>Internet Access</layerName>
+            <layerGroupCode>HOUSEHOLD</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about computer ownership and type of internet subscription. These are 5-year estimates shown by tract,
+                county, and state boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>4f43b3bb1e274795b14e5da42dea95d5</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>18</layerID>
+            <layerName>- Select one</layerName>
+            <layerGroupCode>WEALTH</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about poverty status by age group. These are 5-year estimates shown by tract boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>0e468b75bca545ee8dc4b039cbb5aff6</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>19</layerID>
+            <layerName>Poverty Status</layerName>
+            <layerGroupCode>WEALTH</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about poverty status by age group. These are 5-year estimates shown by tract boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>0e468b75bca545ee8dc4b039cbb5aff6</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>20</layerID>
+            <layerName>Median Household Income</layerName>
+            <layerGroupCode>WEALTH</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about median household income by race and by age of householder. These are 5-year estimates shown by
+                tract boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>45ede6d6ff7e4cbbbffa60d34227e462</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>21</layerID>
+            <layerName>Employment Status</layerName>
+            <layerGroupCode>WEALTH</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about hours worked and not in the labor force. These are 5-year estimates shown by tract boundaries.
+            </layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>a93ad1fcf4a64580b7dbfa3758252ef0</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>22</layerID>
+            <layerName>Educational Attainment</layerName>
+            <layerGroupCode>WEALTH</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about educational levels for adults 25+. Counts broken down by sex. These are 5-year estimates shown by
+                tract boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>84e3022a376e41feb4dd8addf25835a3</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>23</layerID>
+            <layerName>- Select one</layerName>
+            <layerGroupCode>CHILDREN</layerGroupCode>
+            <layerDesc />
+            <layerQuery />
+            <layerURL />
+            <layerType />
+            <sublayerID />
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>24</layerID>
+            <layerName>Youth School and Work Activity</layerName>
+            <layerGroupCode>CHILDREN</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about youth (age 16-19) school enrollment and employment status. These are 5-year estimates shown by
+                tract boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>5c798c532ad5448ea9e973de8ddf8076</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>25</layerID>
+            <layerName>Children with Grandparent Householder</layerName>
+            <layerGroupCode>CHILDREN</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about children in grandparent households by age. These are 5-year estimates shown by tract boundaries.
+            </layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>5f1dadc4bf4040f48c68ba5724debe56</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>26</layerID>
+            <layerName>Children in Immigrant Families</layerName>
+            <layerGroupCode>CHILDREN</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about children by nativity of parents by age group. These are 5-year estimates shown by tract
+                boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>71f0c22b02f54372a9e33bd5ec57fb79</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>27</layerID>
+            <layerName>Child Well Being</layerName>
+            <layerGroupCode>CHILDREN</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about demographic context for child well-being. These are 5-year estimates shown by tract boundaries.
+            </layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>b37cdd372b164f70b29f20113480772c</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>28</layerID>
+            <layerName>- Select one</layerName>
+            <layerGroupCode>RACE</layerGroupCode>
+            <layerDesc />
+            <layerQuery />
+            <layerURL />
+            <layerType />
+            <sublayerID />
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>29</layerID>
+            <layerName>Race and Hispanic Origin</layerName>
+            <layerGroupCode>RACE</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about population broken down by race and Hispanic origin. These are 5-year estimates shown by tract
+                boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>23ab8028f1784de4b0810104cd5d1c8f</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>30</layerID>
+            <layerName>Nativity and Citizenship</layerName>
+            <layerGroupCode>RACE</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about nativity and citizenship status, and year of naturalization. These are 5-year estimates shown by
+                tract boundaries.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>33fc8f99605747fa936f4568b6a59fca</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>31</layerID>
+            <layerName>Language Spoken by Zip Code</layerName>
+            <layerGroupCode>RACE</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about languages spoken aggregated by zip code. These are 5-year estimates shown by zip code boundaries.
+            </layerDesc>
+            <layerQuery />
+            <layerURL>aba5f4bdc7b34ca1af9fe8522f64b638</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>0</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>32</layerID>
+            <layerName>English Ability and Linguistic Isolation</layerName>
+            <layerGroupCode>RACE</layerGroupCode>
+            <layerDesc>This layer shows English ability and linguistic isolation by age group. This layer is symbolized
+                to show the percent of adult (18+) population who have limited English ability.</layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>0c4d1027de6b4d6eb896d95f1240e1aa</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+        <mapLayer>
+            <layerID>33</layerID>
+            <layerName>Place of Birth</layerName>
+            <layerGroupCode>RACE</layerGroupCode>
+            <layerDesc>This layer contains the most current release of data from the American Community Survey (ACS)
+                about place of birth by citizenship status. These are 5-year estimates shown by tract boundaries.
+            </layerDesc>
+            <layerQuery>COUNTY in (\'Harris County\', \'Fort Bend County\', \'Montgomery County\')</layerQuery>
+            <layerURL>f0dd0af9535e4d77864df1b728e4b162</layerURL>
+            <layerType>PORTALITEM</layerType>
+            <sublayerID>2</sublayerID>
+            <popupTitle />
+            <popupContent />
+        </mapLayer>
+    </mapLayers>
+</rss>
