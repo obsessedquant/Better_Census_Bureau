@@ -12,14 +12,14 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 var geoJsonLocation = "48.geojson";
 var csvLocation = "SVI2018_US_small.csv";
 
-d3.csv(csvLocation).then(function (data) {
+d3.csv(csvLocation).Promise.then(function (data) {
   // Once we get a response, send the data.features object to the createFeatures function.
   console.log("csvLocation", data);
-  d3.json(geoJsonLocation).then(function (jsonData) {
+  d3.json(geoJsonLocation).Promise.then(function (jsonData) {
     console.log("geoJsonLocation jsonData: ", jsonData);
     // Once we get a response, send the data.features object to the createFeatures function.
     // createFeatures(jsonData.features);
-    all_data = [];
+    All_Data = [];
     var id = "";
     var csvId = "";
     jsonData.features.forEach(x => {
@@ -29,18 +29,18 @@ d3.csv(csvLocation).then(function (data) {
       x.properties.EXTRA = csvId[0];
       // console.log(x);
       // console.log(csvId);
-      all_data.push(x);
+      All_Data.push(x);
 
       // }
 
     });
-    console.log("all_data", all_data);
+    console.log("all_data", All_Data);
 
-    var geojson;
+    var Geojson;
 
     // d3.json(all_data).then(function (data) {
 
-    geojson = L.choropleth(all_data, {
+    Geojson = L.choropleth(All_Data, {
 
       valueProperty: "E_TOTPOP",
 
