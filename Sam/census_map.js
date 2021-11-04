@@ -12,59 +12,62 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 var geoJsonLocation = "48.geojson";
 var csvLocation = "SVI2018_US_small.csv";
 
-d3.csv(csvLocation).then(function (data) {
+d3.csv(csvLocation).then(function (data)
+  { 
   // Once we get a response, send the data.features object to the createFeatures function.
-  console.log("csvLocation", data);
-  d3.json(geoJsonLocation).then(function (jsonData) {
+   // console.log("csvLocation", data);
+     d3.json(geoJsonLocation).then(function (jsonData)
+    {
     console.log("geoJsonLocation jsonData: ", jsonData);
     // Once we get a response, send the data.features object to the createFeatures function.
     // createFeatures(jsonData.features);
     all_data = [];
     var id = "";
     var csvId = "";
-    jsonData.features.forEach(x => {
-      id = x.properties.GEOID;
-      // if(id==="48201542301"){
-      csvId = data.filter(y => y.FIPS === id);
-      x.properties.EXTRA = csvId[0];
-      // console.log(x);
-      // console.log(csvId);
-      all_data.push(x);
-
-      // }
-
-    });
-    console.log("all_data", all_data);
-
-    var geojson;
-
-    // d3.json(all_data).then(function (data) {
-
-    geojson = L.choropleth(all_data, {
-
-      valueProperty: "E_TOTPOP",
-
-      scale: ["#ffffb2", "#b10026"],
-
-      steps: 10,
-
-      mode: "q",
-      style: {
-        // Border color
-        color: "#fff",
-        weight: 1,
-        fillOpacity: 0.8
-      },
-
-      onEachFeature: function (feature, layer) {
-        layer.bindPopup("Census location: " + feature.properties.EXTRA.E_TOTPOP + "<br>E_TOTPOP:<br>" + "$" + parseInt(feature.properties.EXTRA.E_TOTPOP));
-      }
-    }).addTo(myMap);
-
+    
+     jsonData.features.forEach(x => 
+       {
+        id = x.properties.GEOID;
+        csvId = data.filter(y => y.FIPS === id);
+        x.properties.EXTRA = csvId[0];
+        all_data.push(x);
+       });
+    
+     });
   });
+    
+
+  // console.log("all_data", all_data);
+
+//     var geojson;
+
+//     // d3.json(all_data).then(function (data) {
+
+//     geojson = L.choropleth(all_data, {
+
+//       valueProperty: "E_TOTPOP",
+
+//       scale: ["#ffffb2", "#b10026"],
+
+//       steps: 10,
+
+//       mode: "q",
+//       style: {
+//         // Border color
+//         color: "#fff",
+//         weight: 1,
+//         fillOpacity: 0.8
+//       },
+
+//       onEachFeature: function (feature, layer) {
+//         layer.bindPopup("Census location: " + feature.properties.EXTRA.E_TOTPOP + "<br>E_TOTPOP:<br>" + "$" + parseInt(feature.properties.EXTRA.E_TOTPOP));
+//       }
+//     }).addTo(myMap);
+
+//   });
 
 
-});
+// });
 
   // createFeatures(all_data);
 // });
@@ -244,5 +247,3 @@ d3.csv(csvLocation).then(function (data) {
 //   }).addTo(myMap);
 
 //   updateLegend();
-
-// }
