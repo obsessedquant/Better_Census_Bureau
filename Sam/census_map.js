@@ -12,58 +12,6 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 var geoJsonLocation = "48.geojson";
 var csvLocation = "SVI2018_US_small.csv";
 
-
-d3.csv(csvLocation).Promise.then(function (data) {
-  // Once we get a response, send the data.features object to the createFeatures function.
-  console.log("csvLocation", data);
-  d3.json(geoJsonLocation).Promise.then(function (jsonData) {
-    console.log("geoJsonLocation jsonData: ", jsonData);
-    // Once we get a response, send the data.features object to the createFeatures function.
-    // createFeatures(jsonData.features);
-    All_Data = [];
-    var id = "";
-    var csvId = "";
-    jsonData.features.forEach(x => {
-      id = x.properties.GEOID;
-      // if(id==="48201542301"){
-      csvId = data.filter(y => y.FIPS === id);
-      x.properties.EXTRA = csvId[0];
-      // console.log(x);
-      // console.log(csvId);
-      All_Data.push(x);
-
-      // }
-
-    });
-    console.log("all_data", All_Data);
-
-    var Geojson;
-
-    // d3.json(all_data).then(function (data) {
-
-    Geojson = L.choropleth(All_Data, {
-
-      valueProperty: "E_TOTPOP",
-
-      scale: ["#ffffb2", "#b10026"],
-
-      steps: 10,
-
-      mode: "q",
-      style: {
-        // Border color
-        color: "#fff",
-        weight: 1,
-        fillOpacity: 0.8
-      },
-
-      onEachFeature: function (feature, layer) {
-        layer.bindPopup("Census location: " + feature.properties.EXTRA.E_TOTPOP + "<br>E_TOTPOP:<br>" + "$" + parseInt(feature.properties.EXTRA.E_TOTPOP));
-      }
-    }).addTo(myMap);
-
-=======
->>>>>>> 1eef33ab9b924991e904ff14b37b85ce118b9b33
 d3.csv(csvLocation).then(function (data)
   { 
   // Once we get a response, read the data into variables
@@ -71,7 +19,6 @@ d3.csv(csvLocation).then(function (data)
    // console.log("csvLocation", data);
      d3.json(geoJsonLocation).then(function (jsonData)
     {
-<<<<<<< HEAD
      jsonData.features.forEach(x => 
        {
         id = x.properties.GEOID;
@@ -111,32 +58,6 @@ d3.csv(csvLocation).then(function (data)
 
     
      });
-=======
-    // console.log("geoJsonLocation jsonData: ", jsonData);
-    all_data = [];
-    var id = "";
-    var csvId = "";
-    
-     jsonData.features.forEach(x => 
-       {
-        
-        id = x.properties.GEOID;
-       // console.log("id",id)
-        csvId = data.filter(y => y.FIPS === id);
-      //  console.log("csvID",csvId)
-        x.properties.EXTRA = csvId[0];
-      //  console.log("x",x)
-        all_data.push(x);
-       });
-
-  // console.log("all_data",all_data);
-  // the all_data list should have the data that we need to bind to the map
-    createFeatures(all_data);
-
-    
-     });
->>>>>>> 811b2dae9c4459232e53fb26538c4b3064ccc7b5
->>>>>>> 1eef33ab9b924991e904ff14b37b85ce118b9b33
   });
 
 // end census_map.js
@@ -344,8 +265,4 @@ function createFeatures(houstonData) {
 //       collapsed: false
 //   }).addTo(myMap);
 
-<<<<<<< HEAD
 //   updateLegend();
-=======
-//   updateLegend();
->>>>>>> 1eef33ab9b924991e904ff14b37b85ce118b9b33
