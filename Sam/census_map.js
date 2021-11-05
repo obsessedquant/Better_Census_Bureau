@@ -2,68 +2,38 @@
 
 var myMap = L.map("map", {
   center: [29.7604, -95.3698],
-  zoom: 12
+  zoom: 12,
 });
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(myMap);
 
 var geoJsonLocation = "48.geojson";
 var csvLocation = "SVI2018_US_small.csv";
 
-d3.csv(csvLocation).then(function (data)
-  { 
+d3.csv(csvLocation).then(function (data) {
   // Once we get a response, read the data into variables
 
-   // console.log("csvLocation", data);
-     d3.json(geoJsonLocation).then(function (jsonData)
-    {
-     jsonData.features.forEach(x => 
-       {
-        id = x.properties.GEOID;
-        csvId = data.filter(y => y.FIPS === id);
-        x.properties.EXTRA = csvId[0];
-       });
+  // console.log("csvLocation", data);
+  d3.json(geoJsonLocation).then(function (jsonData) {
+    jsonData.features.forEach((x) => {
+      id = x.properties.GEOID;
+      csvId = data.filter((y) => y.FIPS === id);
+      x.properties.EXTRA = csvId[0];
+    });
 
+    console.log("geoJsonLocation jsonData: ", jsonData);
 
-      console.log("geoJsonLocation jsonData: ", jsonData);
+    createFeatures(jsonData);
 
-      L.geoJson(jsonData, {
-        style:{},
-        onEachFeature: function (feature, layer) {
-
-        }
-
-      }).addTo(myMap);
-  //   all_data = [];
-  //   var id = "";
-  //   var csvId = "";
-    
-  //    jsonData.features.forEach(x => 
-  //      {
-        
-  //       id = x.properties.GEOID;
-  //      // console.log("id",id)
-  //       csvId = data.filter(y => y.FIPS === id);
-  //     //  console.log("csvID",csvId)
-  //       x.properties.EXTRA = csvId[0];
-  //     //  console.log("x",x)
-  //       all_data.push(x);
-  //      });
-
-  // // console.log("all_data",all_data);
-  // // the all_data list should have the data that we need to bind to the map
-  //   createFeatures(all_data);
-
-    
-     });
+    L.geoJson(jsonData, {
+      style: {},
+      onEachFeature: function (feature, layer) {},
+    }).addTo(myMap);
   });
-
-// end census_map.js
-
-
- 
+});
 
 // var street = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenS...',
@@ -74,42 +44,88 @@ d3.csv(csvLocation).then(function (data)
 //   accessToken: 'pk.eyJ1Ijoic3JvYmluc29uMjI2IiwiYSI6ImNrdmh4OGczdWFrMmsydW9mdGViZjB4enYifQ.M7SwNQspK272zHmaVqumdA'
 // }).addTo(myMap);
 
-
-
-// will bind features to the map 
+// will bind features to the map
 function createFeatures(houstonData) {
   console.log("houstonData is: ", houstonData);
-  console.log("coordinates are: ", houstonData[0].geometry.coordinates[0][0][1]);
-  console.log("E_TOTPOP is: ", houstonData[0].properties.EXTRA.E_TOTPOP);
-  console.log("E_TOTPOP is: ", parseInt(houstonData[0].properties.EXTRA.E_TOTPOP));
+  console.log(
+    "coordinates are: ",
+    houstonData.features[0].geometry.coordinates[0][0][1]
+  );
+  console.log(
+    "E_TOTPOP is: ",
+    houstonData.features[0].properties.EXTRA.E_TOTPOP
+  );
+  console.log(
+    "E_TOTPOP is: ",
+    parseInt(houstonData.features[0].properties.EXTRA.E_TOTPOP)
+  );
   var geojson;
 
   // d3.json(all_data).then(function (data) {
-  
-  geojson = L.choropleth(all_data,
-     {
-  
-        valueProperty: "E_TOTPOP",
-  
-        scale: ["#ffffb2", "#b10026"],
-  
-        steps: 10,
-  
-        mode: "q",
-        style: {
-          // Border color
-          color: "#fff",
-          weight: 1,
-          fillOpacity: 0.8
-        },
-  
-        onEachFeature: function (feature, layer) {
-          layer.bindPopup("Census location: " + feature.properties.EXTRA.E_TOTPOP + "<br>E_TOTPOP:<br>" + "$" + 
-          parseInt(feature.properties.EXTRA.E_TOTPOP));
-        }
-      }).addTo(myMap);
+
+  console.log("houstonData.features is: ", houstonData.features);
+
+  geojson = L.choropleth(houstonData.features, {
+    valueProperty: "E_TOTPOP",
+
+    scale: ["#ffffb2", "#b10026"],
+
+    steps: 10,
+
+    mode: "q",
+    style: {
+      // Border color
+      color: "#fff",
+      weight: 1,
+      fillOpacity: 0.8,
+    },
+
+    // L.geoJson(jsonData, {
+    //   style: {},
+    //   onEachFeature: function (feature, layer) {},
+    // }).addTo(myMap);
+
+    onEachFeature: function (feature, layer) {
+      layer.bindPopup(
+        "Census location: " +
+          houstonData.features.properties.EXTRA.E_TOTPOP +
+          "<br>E_TOTPOP:<br>" +
+          "$" +
+          parseInt(feature.features.properties.EXTRA.E_TOTPOP)
+      );
+    },
+  }).addTo(myMap);
 }
 
+// d3.json(geoData).then(function(data) {
+
+//   // Create a new choropleth layer.
+//   geojson = L.choropleth(data, {
+
+//     // Define which property in the features to use.
+//     valueProperty: "MHI2016",
+
+//     // Set the color scale.
+//     scale: ["#ffffb2", "#b10026"],
+
+//     // The number of breaks in the step range
+//     steps: 10,
+
+//     // q for quartile, e for equidistant, k for k-means
+//     mode: "q",
+//     style: {
+//       // Border color
+//       color: "#fff",
+//       weight: 1,
+//       fillOpacity: 0.8
+//     },
+
+//     // Binding a popup to each layer
+//     onEachFeature: function(feature, layer) {
+//       layer.bindPopup("Zip Code: " + feature.properties.ZIP + "<br>Median Household Income:<br>" +
+//         "$" + feature.properties.MHI2016);
+//     }
+//   }).addTo(myMap);
 
 //   var geojson;
 
@@ -134,51 +150,51 @@ function createFeatures(houstonData) {
 //     }
 //   }).addTo(myMap);
 
-  // houstonData.forEach(x => {
-  //   // heatArray.push([x.geometry.coordinates[0][0][1],x.geometry.coordinates[0][0][1],parseInt(x.properties.EXTRA.E_TOTPOP)]);
-  //   heatArray.push([x.geometry.coordinates[0][0][1], x.geometry.coordinates[0][0][0], (Math.floor(Math.random() * 9) + 1) / 10]);
-  // });
+// houstonData.forEach(x => {
+//   // heatArray.push([x.geometry.coordinates[0][0][1],x.geometry.coordinates[0][0][1],parseInt(x.properties.EXTRA.E_TOTPOP)]);
+//   heatArray.push([x.geometry.coordinates[0][0][1], x.geometry.coordinates[0][0][0], (Math.floor(Math.random() * 9) + 1) / 10]);
+// });
 
-  // console.log("heat array is: ", heatArray);
+// console.log("heat array is: ", heatArray);
 
-  // var heatArray = [];
+// var heatArray = [];
 
-  // var heat = L.heatLayer(heatArray, {
-  //   radius: 20,
-  //   blur: 35
-  // }).addTo(myMap);
+// var heat = L.heatLayer(heatArray, {
+//   radius: 20,
+//   blur: 35
+// }).addTo(myMap);
 
-  //   function chooseColor(size) {
-  //       if (size > 90) color = "rgb(255,95,102)";
-  //       else if (size > 70) color = "rgb(255,164,101)";
-  //       else if (size > 50) color = "rgb(250,220,66)";
-  //       else if (size > 30) color = "rgb(250,220,66)";
-  //       else if (size > 10) color = "rgb(218,245,70)";
-  //       else color = "rgb(153,247,69)";
-  //       return color;
-  //   }
+//   function chooseColor(size) {
+//       if (size > 90) color = "rgb(255,95,102)";
+//       else if (size > 70) color = "rgb(255,164,101)";
+//       else if (size > 50) color = "rgb(250,220,66)";
+//       else if (size > 30) color = "rgb(250,220,66)";
+//       else if (size > 10) color = "rgb(218,245,70)";
+//       else color = "rgb(153,247,69)";
+//       return color;
+//   }
 
-  //   var list_of_earthquakes = [];
-  //   var locationz = [];
+//   var list_of_earthquakes = [];
+//   var locationz = [];
 
-  //   // Add circles to the map.
-  //   earthquakeData.forEach(x => {
-  //       locationz = [];
-  //       locationz = [x.geometry.coordinates[1], x.geometry.coordinates[0]];
-  //       list_of_earthquakes.push(L.circle(locationz, {
-  //           fillOpacity: 0.75,
-  //           color: "black",
-  //           weight: 0.5,
-  //           fillColor: chooseColor(x.geometry.coordinates[2]),
-  //           radius: x.properties.mag * 100000
-  //       }).bindPopup(`<h3>${x.properties.place}</h3><hr><p>${new Date(x.properties.time)}</p>`));
-  //   });
+//   // Add circles to the map.
+//   earthquakeData.forEach(x => {
+//       locationz = [];
+//       locationz = [x.geometry.coordinates[1], x.geometry.coordinates[0]];
+//       list_of_earthquakes.push(L.circle(locationz, {
+//           fillOpacity: 0.75,
+//           color: "black",
+//           weight: 0.5,
+//           fillColor: chooseColor(x.geometry.coordinates[2]),
+//           radius: x.properties.mag * 100000
+//       }).bindPopup(`<h3>${x.properties.place}</h3><hr><p>${new Date(x.properties.time)}</p>`));
+//   });
 
-  //   console.log("list of earthquakes is: ", list_of_earthquakes);
+//   console.log("list of earthquakes is: ", list_of_earthquakes);
 
-  //   var earthquakes_0 = L.layerGroup(list_of_earthquakes);
+//   var earthquakes_0 = L.layerGroup(list_of_earthquakes);
 
-  //   return earthquakes_0
+//   return earthquakes_0
 
 // function updateLegend() {
 //   console.log('updateLegend called')
