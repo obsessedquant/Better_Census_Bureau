@@ -36,9 +36,11 @@ d3.csv(csvLocation).then(function (data) {
 
     console.log("geoJsonLocation jsonData: ", jsonData.features);
 
+    // Layer definition declarations
     var pop_per_sq_mile = new L.LayerGroup();
     var populationz = new L.LayerGroup();
 
+    // Collect geojson depending on which layer is selected
     geojson_pop_per_sq_mi = L.choropleth(jsonData, {
       valueProperty: "zPop",
 
@@ -65,6 +67,7 @@ d3.csv(csvLocation).then(function (data) {
       // }).addTo(myMap);
     }).addTo(pop_per_sq_mile);
 
+    // Second layer
     geojson_pop = L.choropleth(jsonData, {
       valueProperty: "E_TOTPOP",
 
@@ -91,8 +94,42 @@ d3.csv(csvLocation).then(function (data) {
       // }).addTo(myMap);
     }).addTo(populationz);
 
-    var legend = L.control({ position: "bottomright" });
-    legend.onAdd = function () {
+    // Legends
+
+    var pop_legend = L.control({ position: "bottomright" });
+    var pop_per_sq_mi_legend = L.control({ position: "bottomright" });
+
+    pop_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_pop.options.limits;
+      var colors = geojson_pop.options.colors;
+      var labels = [];
+
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>Population</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
+
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
+      });
+
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
+
+    pop_per_sq_mi_legend.onAdd = function () {
       var div = L.DomUtil.create("div", "info legend");
       var limits = geojson_pop_per_sq_mi.options.limits;
       var colors = geojson_pop_per_sq_mi.options.colors;
@@ -149,22 +186,22 @@ d3.csv(csvLocation).then(function (data) {
       .addTo(myMap);
 
     // Adding the legend to the map
-    legend.addTo(myMap);
+    pop_per_sq_mi_legend.addTo(myMap);
 
-    // var layerToLegendMapping={
-    //   "Housing": houselegend,
-    //   "Families": childlegend
-    // }
-    // function legendAdd(event) {
-    //   var layername = event.name;
-    //   map.addControl(layerToLegendMapping[layername]);
-    // }
-    // function legendRemove(event) {
-    //   var layername = event.name;
-    //   map.removeControl(layerToLegendMapping[layername]);
-    // }
-    // map.on('overlayadd',legendAdd);
-    // map.on('overlayremove',legendRemove);
+    var layerToLegendMapping = {
+      Population: pop_legend,
+      "Population per sq mi": pop_per_sq_mi_legend,
+    };
+    function legendAdd(event) {
+      var layername = event.name;
+      myMap.addControl(layerToLegendMapping[layername]);
+    }
+    function legendRemove(event) {
+      var layername = event.name;
+      myMap.removeControl(layerToLegendMapping[layername]);
+    }
+    myMap.on("overlayadd", legendAdd);
+    myMap.on("overlayremove", legendRemove);
   });
 });
 
