@@ -21,16 +21,55 @@ d3.csv(csvLocation).then(function (data) {
     jsonData.features.forEach((x) => {
       id = x.properties.GEOID;
       csvId = data.filter((y) => y.FIPS === id);
-      x.properties.EXTRA = csvId[0];
+      // console.log(csvId[0].E_TOTPOP);
+      x.properties = Object.assign(x.properties, csvId[0]);
+      // x.properties.EXTRA = csvId[0];
     });
 
-    console.log("geoJsonLocation jsonData: ", jsonData);
+    jsonData.features.forEach((x) => {
+      x.properties.E_TOTPOP = +x.properties.E_TOTPOP;
+    });
 
-    createFeatures(jsonData);
+    console.log("geoJsonLocation jsonData: ", jsonData.features);
 
-    L.geoJson(jsonData, {
-      style: {},
-      onEachFeature: function (feature, layer) {},
+    // createFeatures(jsonData);
+
+    // L.geoJson(jsonData.features, {
+    //   style: {},
+    //   onEachFeature: function (feature, layer) {
+
+    //   },
+    // }).addTo(myMap);
+
+    geojson = L.choropleth(jsonData, {
+      valueProperty: "E_TOTPOP",
+
+      scale: ["#ffffb2", "#b10026"],
+
+      steps: 10,
+
+      mode: "q",
+      style: {
+        // Border color
+        color: "#fff",
+        weight: 1,
+        fillOpacity: 0.8,
+      },
+
+      // L.geoJson(jsonData, {
+      //   style: {},
+      //   onEachFeature: function (feature, layer) {},
+      // }).addTo(myMap);
+
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(
+          "Census location: " +
+            feature.properties.E_TOTPOP +
+            "<br>E_TOTPOP:<br>" +
+            "$" +
+            parseInt(feature.properties.E_TOTPOP)
+        );
+      },
     }).addTo(myMap);
   });
 });
