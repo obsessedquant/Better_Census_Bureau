@@ -46,7 +46,7 @@ d3.csv(csvLocation).then(function (data) {
     geojson_mpop = L.choropleth(jsonData, {
       valueProperty: "mPop",
 
-      scale: ["#ffffb2", "#b10026"],
+      scale: ["#ffffb2", "#06b100"],
 
       steps: 10,
 
@@ -243,3 +243,64 @@ d3.csv(csvLocation).then(function (data) {
 //   zoomOffset: -1,
 //   accessToken: 'pk.eyJ1Ijoic3JvYmluc29uMjI2IiwiYSI6ImNrdmh4OGczdWFrMmsydW9mdGViZjB4enYifQ.M7SwNQspK272zHmaVqumdA'
 // }).addTo(myMap);
+
+// Hover feature
+  // function highlightFeature(e){
+  //   var layer = e.target;
+
+  //   layer.setStyle({
+  //     weight: 5,
+  //     color: '#666',
+  //     dashArray: '',
+  //     fillOpacity: 0.7
+  //   });
+
+  //   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+  //     layer.bringToFront();
+  //   }
+  // }
+
+  // function resetHignLight(e){
+  //   jsonData.resetStyle(e.target);
+  // }
+
+  // function zoomToFeature(e){
+  //   map.fitBounds(e.target.getBonunds());
+  // }
+
+  // function onEachFeature(feature, layer){
+  //   layer.on({
+  //     mouseover: highlightFeature,
+  //     mouseout: resetHignLight,
+  //     click: zoomToFeature,
+  //   });
+  // }
+
+  // geojson = L.geoJson(jsonData, {
+  //   style: style,
+  //   onEachFeature: onEachFeature
+  // }).addTo(map);
+
+  // var info = L.control();
+
+  // info.onAdd = function (map) {
+  //   this._div = L.DomUtil.create('div', 'info');
+  //   this.update();
+  //   return this._div;
+  // }
+
+  // info.update = function(props){
+  //   this._div.innerHTML = '<h4>Texas Population Census</h4>' + (props ?
+  //     '<b>' + props.LOCATION + '</b><b />' + props.mPop + 'people / mi<sup>2</sup>'
+  //     : 'Hover over an Area')
+  // };
+
+  // info.addTo(map)
+
+  // function highlightFeature(e){
+  //   info.update(layer.feature.properties);
+  // }
+
+  // function resetHignLight (e){
+  //   info.update();
+  // }
