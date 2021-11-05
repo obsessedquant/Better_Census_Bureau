@@ -37,8 +37,9 @@ d3.csv(csvLocation).then(function (data) {
     console.log("geoJsonLocation jsonData: ", jsonData.features);
 
     var pop_per_sq_mile = new L.LayerGroup();
+    var populationz = new L.LayerGroup();
 
-    geojson = L.choropleth(jsonData, {
+    geojson_pop_per_sq_mi = L.choropleth(jsonData, {
       valueProperty: "zPop",
 
       scale: ["#ffffb2", "#b10026"],
@@ -64,16 +65,42 @@ d3.csv(csvLocation).then(function (data) {
       // }).addTo(myMap);
     }).addTo(pop_per_sq_mile);
 
+    geojson_pop = L.choropleth(jsonData, {
+      valueProperty: "E_TOTPOP",
+
+      scale: ["#e7feff", "#4169e1"],
+
+      steps: 10,
+
+      mode: "q",
+      style: {
+        // Border color
+        color: "#fff",
+        weight: 1,
+        fillOpacity: 0.8,
+      },
+
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(
+          "Location:<br>" +
+            feature.properties.LOCATION +
+            "<br><br>Population:<br>" +
+            Math.round(feature.properties.E_TOTPOP)
+        );
+      },
+      // }).addTo(myMap);
+    }).addTo(populationz);
+
     var legend = L.control({ position: "bottomright" });
     legend.onAdd = function () {
       var div = L.DomUtil.create("div", "info legend");
-      var limits = geojson.options.limits;
-      var colors = geojson.options.colors;
+      var limits = geojson_pop_per_sq_mi.options.limits;
+      var colors = geojson_pop_per_sq_mi.options.colors;
       var labels = [];
 
       // Add the minimum and maximum.
       var legendInfo =
-        "<h1>Population</h1>" +
+        "<h1>Population per Sq Mi</h1>" +
         '<div class="labels">' +
         '<div class="min">' +
         limits[0] +
@@ -111,6 +138,7 @@ d3.csv(csvLocation).then(function (data) {
     var overlayMaps = {
       // Earthquakes: earthquakes,
       //"Earthquakes": layers.quakes,
+      Population: populationz,
       "Population per sq mi": pop_per_sq_mile,
     };
 
@@ -122,6 +150,21 @@ d3.csv(csvLocation).then(function (data) {
 
     // Adding the legend to the map
     legend.addTo(myMap);
+
+    // var layerToLegendMapping={
+    //   "Housing": houselegend,
+    //   "Families": childlegend
+    // }
+    // function legendAdd(event) {
+    //   var layername = event.name;
+    //   map.addControl(layerToLegendMapping[layername]);
+    // }
+    // function legendRemove(event) {
+    //   var layername = event.name;
+    //   map.removeControl(layerToLegendMapping[layername]);
+    // }
+    // map.on('overlayadd',legendAdd);
+    // map.on('overlayremove',legendRemove);
   });
 });
 
