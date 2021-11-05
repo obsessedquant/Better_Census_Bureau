@@ -12,9 +12,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 var geoJsonLocation = "48.geojson";
 var csvLocation = "SVI2018_US_small.csv";
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
+
 d3.csv(csvLocation).Promise.then(function (data) {
   // Once we get a response, send the data.features object to the createFeatures function.
   console.log("csvLocation", data);

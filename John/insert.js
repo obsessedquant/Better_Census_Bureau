@@ -1,20 +1,11 @@
+const express = require('express')
 
-const { Client } = require('postgres')
+const app = express()
 
-const client = new Client({
-  host: 'localhost',
-  port: 5432,
-  user: 'postgres',
-  password: '{password}',
-})
+const port = 3000
 
-client.connect();
+app.use(express.json());
 
-client.query(`select * from "TEXAS" limit 10`, (err,res)=>{
-    if(!err){
-        console.log(res.rows);
-    } else {
-        console.log(err.message);
-    }
-    client.end;
-})
+app.get('/', (req, res) => res.json({ message: 'Hello World' }))
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
