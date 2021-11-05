@@ -1,49 +1,50 @@
 // Store our API endpoint as queryUrl.
 
-var myMap = L.map("map", {
-  center: [29.7604, -95.3698],
-  zoom: 12
+var street = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  // }).addTo(myMap);
 });
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(myMap);
+var topo = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
+  attribution:
+    'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+});
 
 var geoJsonLocation = "48.geojson";
 var csvLocation = "SVI2018_US_small.csv";
 
+d3.csv(csvLocation).then(function (data) {
+  // console.log("csvLocation", data);
 
-d3.csv(csvLocation).Promise.then(function (data) {
-  // Once we get a response, send the data.features object to the createFeatures function.
-  console.log("csvLocation", data);
-  d3.json(geoJsonLocation).Promise.then(function (jsonData) {
-    console.log("geoJsonLocation jsonData: ", jsonData);
-    // Once we get a response, send the data.features object to the createFeatures function.
-    // createFeatures(jsonData.features);
-    All_Data = [];
-    var id = "";
-    var csvId = "";
-    jsonData.features.forEach(x => {
+  // Read dataset, put into variable, filter
+  d3.json(geoJsonLocation).then(function (jsonData) {
+    jsonData.features.forEach((x) => {
       id = x.properties.GEOID;
-      // if(id==="48201542301"){
-      csvId = data.filter(y => y.FIPS === id);
-      x.properties.EXTRA = csvId[0];
-      // console.log(x);
-      // console.log(csvId);
-      All_Data.push(x);
-
-      // }
-
+      csvId = data.filter((y) => y.FIPS === id);
+      // console.log(csvId[0].E_TOTPOP);
+      x.properties = Object.assign(x.properties, csvId[0]);
+      // x.properties.EXTRA = csvId[0];
     });
-    console.log("all_data", All_Data);
 
-    var Geojson;
+    // Convert data from string to number
+    jsonData.features.forEach((x) => {
+      x.properties.E_TOTPOP = +x.properties.E_TOTPOP;
+      x.properties.AREA_SQMI = +x.properties.AREA_SQMI;
+      x.properties.zPop = x.properties.E_TOTPOP / x.properties.AREA_SQMI;
+      x.properties.E_MINRTY = +x.properties.E_MINRTY;
+      x.properties.mPop = (x.properties.E_MINRTY / x.properties.E_TOTPOP) * 100;
+    });
+    
+    console.log("geoJsonLocation jsonData: ", jsonData.features);
 
-    // d3.json(all_data).then(function (data) {
-
-    Geojson = L.choropleth(All_Data, {
-
-      valueProperty: "E_TOTPOP",
+    // Layer definition declarations
+    var pop_per_sq_mile = new L.LayerGroup();
+    var populationz = new L.LayerGroup();
+    var per_mpop = new L.LayerGroup();
+  
+    geojson_mpop = L.choropleth(jsonData, {
+      valueProperty: "mPop",
 
       scale: ["#ffffb2", "#b10026"],
 
@@ -54,134 +55,191 @@ d3.csv(csvLocation).Promise.then(function (data) {
         // Border color
         color: "#fff",
         weight: 1,
-        fillOpacity: 0.8
+        fillOpacity: 0.8,
       },
 
       onEachFeature: function (feature, layer) {
-        layer.bindPopup("Census location: " + feature.properties.EXTRA.E_TOTPOP + "<br>E_TOTPOP:<br>" + "$" + parseInt(feature.properties.EXTRA.E_TOTPOP));
-      }
-    }).addTo(myMap);
+        layer.bindPopup(
+          "Location:<br>" +
+            feature.properties.LOCATION +
+            "<br><br>Percent of Minority<br>" +
+            Math.round(feature.properties.mPop)
+        );
+      },
+      // }).addTo(myMap);
+    }).addTo(per_mpop);
 
+    // Collect geojson depending on which layer is selected
+    geojson_pop_per_sq_mi = L.choropleth(jsonData, {
+      valueProperty: "zPop",
 
-    d3.csv(csvLocation).then(function (data) {
-      // Once we get a response, read the data into variables
+      scale: ["#ffffb2", "#b10026"],
 
-      // console.log("csvLocation", data);
-      d3.json(geoJsonLocation).then(function (jsonData) {
+      steps: 10,
 
-        jsonData.features.forEach(x => {
-          id = x.properties.GEOID;
-          csvId = data.filter(y => y.FIPS === id);
-          x.properties.EXTRA = csvId[0];
-        });
+      mode: "q",
+      style: {
+        // Border color
+        color: "#fff",
+        weight: 1,
+        fillOpacity: 0.8,
+      },
 
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(
+          "Location:<br>" +
+            feature.properties.LOCATION +
+            "<br><br>Population per Sq Mile:<br>" +
+            Math.round(feature.properties.zPop)
+        );
+      },
+      // }).addTo(myMap);
+    }).addTo(pop_per_sq_mile);
 
-        console.log("geoJsonLocation jsonData: ", jsonData);
+    // Second layer
+    geojson_pop = L.choropleth(jsonData, {
+      valueProperty: "E_TOTPOP",
 
-        L.geoJson(jsonData, {
-          style: {},
-          onEachFeature: function (feature, layer) {
+      scale: ["#e7feff", "#4169e1"],
 
-          }
+      steps: 10,
 
-        }).addTo(myMap);
-        //   all_data = [];
-        //   var id = "";
-        //   var csvId = "";
+      mode: "q",
+      style: {
+        // Border color
+        color: "#fff",
+        weight: 1,
+        fillOpacity: 0.8,
+      },
 
-        //    jsonData.features.forEach(x => 
-        //      {
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(
+          "Location:<br>" +
+            feature.properties.LOCATION +
+            "<br><br>Population:<br>" +
+            Math.round(feature.properties.E_TOTPOP)
+        );
+      },
+      // }).addTo(myMap);
+    }).addTo(populationz);
 
-        //       id = x.properties.GEOID;
-        //      // console.log("id",id)
-        //       csvId = data.filter(y => y.FIPS === id);
-        //     //  console.log("csvID",csvId)
-        //       x.properties.EXTRA = csvId[0];
-        //     //  console.log("x",x)
-        //       all_data.push(x);
-        //      });
+    // Legends
 
-        // // console.log("all_data",all_data);
-        // // the all_data list should have the data that we need to bind to the map
-        //   createFeatures(all_data);
+    var pop_legend = L.control({ position: "bottomright" });
+    var pop_per_sq_mi_legend = L.control({ position: "bottomright" });
 
+    pop_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_pop.options.limits;
+      var colors = geojson_pop.options.colors;
+      var labels = [];
 
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>Population</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
+
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
       });
 
-      // console.log("geoJsonLocation jsonData: ", jsonData);
-      all_data = [];
-      var id = "";
-      var csvId = "";
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
 
-      jsonData.features.forEach(x => {
+    pop_per_sq_mi_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_pop_per_sq_mi.options.limits;
+      var colors = geojson_pop_per_sq_mi.options.colors;
+      var labels = [];
 
-        id = x.properties.GEOID;
-        // console.log("id",id)
-        csvId = data.filter(y => y.FIPS === id);
-        //  console.log("csvID",csvId)
-        x.properties.EXTRA = csvId[0];
-        //  console.log("x",x)
-        all_data.push(x);
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>Population per Sq Mi</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
+
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
       });
 
-      // console.log("all_data",all_data);
-      // the all_data list should have the data that we need to bind to the map
-      createFeatures(all_data);
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
 
-
+    var myMap = L.map("map", {
+      center: [29.7604, -95.3698],
+      zoom: 12,
+      layers: [street, pop_per_sq_mile],
     });
 
+    // Create a baseMaps object.
+    var baseMaps = {
+      "Street Map": street,
+      "Topographic Map": topo,
+    };
+
+    // Create an overlay object to hold our overlay.
+    var overlayMaps = {
+      // Earthquakes: earthquakes,
+      //"Earthquakes": layers.quakes,
+      Population: populationz,
+      "Population per sq mi": pop_per_sq_mile,
+      "Percent of Minorities": per_mpop,
+    };
+
+    L.control
+      .layers(baseMaps, overlayMaps, {
+        collapsed: false,
+      })
+      .addTo(myMap);
+
+    // Adding the legend to the map
+    pop_per_sq_mi_legend.addTo(myMap);
+
+    var layerToLegendMapping = {
+      Population: pop_legend,
+      "Population per sq mi": pop_per_sq_mi_legend,
+    };
+    function legendAdd(event) {
+      var layername = event.name;
+      myMap.addControl(layerToLegendMapping[layername]);
+    }
+    function legendRemove(event) {
+      var layername = event.name;
+      myMap.removeControl(layerToLegendMapping[layername]);
+    }
+    myMap.on("overlayadd", legendAdd);
+    myMap.on("overlayremove", legendRemove);
   });
+});
 
-  // end census_map.js
-
-
-
-
-  // var street = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-  //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenS...',
-  //   maxZoom: 18,
-  //   id: 'mapbox/streets-v11',
-  //   tileSize: 512,
-  //   zoomOffset: -1,
-  //   accessToken: 'pk.eyJ1Ijoic3JvYmluc29uMjI2IiwiYSI6ImNrdmh4OGczdWFrMmsydW9mdGViZjB4enYifQ.M7SwNQspK272zHmaVqumdA'
-  // }).addTo(myMap);
-
-
-
-  // will bind features to the map 
-  function createFeatures(houstonData) {
-    console.log("houstonData is: ", houstonData);
-    console.log("coordinates are: ", houstonData[0].geometry.coordinates[0][0][1]);
-    console.log("E_TOTPOP is: ", houstonData[0].properties.EXTRA.E_TOTPOP);
-    console.log("E_TOTPOP is: ", parseInt(houstonData[0].properties.EXTRA.E_TOTPOP));
-    var geojson;
-
-    // d3.json(all_data).then(function (data) {
-
-    geojson = L.choropleth(all_data,
-      {
-
-        valueProperty: "E_TOTPOP",
-
-        scale: ["#ffffb2", "#b10026"],
-
-        steps: 10,
-
-        mode: "q",
-        style: {
-          // Border color
-          color: "#fff",
-          weight: 1,
-          fillOpacity: 0.8
-        },
-
-        onEachFeature: function (feature, layer) {
-          layer.bindPopup("Census location: " + feature.properties.EXTRA.E_TOTPOP + "<br>E_TOTPOP:<br>" + "$" +
-            parseInt(feature.properties.EXTRA.E_TOTPOP));
-        }
-      }).addTo(myMap);
-  };
-
-}
-);
+// var street = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+//   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenS...',
+//   maxZoom: 18,
+//   id: 'mapbox/streets-v11',
+//   tileSize: 512,
+//   zoomOffset: -1,
+//   accessToken: 'pk.eyJ1Ijoic3JvYmluc29uMjI2IiwiYSI6ImNrdmh4OGczdWFrMmsydW9mdGViZjB4enYifQ.M7SwNQspK272zHmaVqumdA'
+// }).addTo(myMap);
