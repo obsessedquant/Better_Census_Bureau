@@ -1,14 +1,15 @@
 // Store our API endpoint as queryUrl.
 
-var myMap = L.map("map", {
-  center: [29.7604, -95.3698],
-  zoom: 12,
-});
-
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+var street = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-}).addTo(myMap);
+  // }).addTo(myMap);
+});
+
+var topo = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
+  attribution:
+    'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+});
 
 var geoJsonLocation = "48.geojson";
 var csvLocation = "SVI2018_US_small.csv";
@@ -35,8 +36,10 @@ d3.csv(csvLocation).then(function (data) {
 
     console.log("geoJsonLocation jsonData: ", jsonData.features);
 
+    var pop_per_sq_mile = new L.LayerGroup();
+
     geojson = L.choropleth(jsonData, {
-      valueProperty: "E_TOTPOP",
+      valueProperty: "zPop",
 
       scale: ["#ffffb2", "#b10026"],
 
@@ -52,14 +55,14 @@ d3.csv(csvLocation).then(function (data) {
 
       onEachFeature: function (feature, layer) {
         layer.bindPopup(
-          "Census location: " +
-            feature.properties.E_TOTPOP +
-            "<br>E_TOTPOP:<br>" +
-            "$" +
-            parseInt(feature.properties.E_TOTPOP)
+          "Location:<br>" +
+            feature.properties.LOCATION +
+            "<br><br>Population per Sq Mile:<br>" +
+            Math.round(feature.properties.zPop)
         );
       },
-    }).addTo(myMap);
+      // }).addTo(myMap);
+    }).addTo(pop_per_sq_mile);
 
     var legend = L.control({ position: "bottomright" });
     legend.onAdd = function () {
@@ -76,7 +79,7 @@ d3.csv(csvLocation).then(function (data) {
         limits[0] +
         "</div>" +
         '<div class="max">' +
-        limits[limits.length - 1] +
+        Math.round(limits[limits.length - 1]) +
         "</div>" +
         "</div>";
 
@@ -91,6 +94,31 @@ d3.csv(csvLocation).then(function (data) {
       div.innerHTML += "<ul>" + labels.join("") + "</ul>";
       return div;
     };
+
+    var myMap = L.map("map", {
+      center: [29.7604, -95.3698],
+      zoom: 12,
+      layers: [street, pop_per_sq_mile],
+    });
+
+    // Create a baseMaps object.
+    var baseMaps = {
+      "Street Map": street,
+      "Topographic Map": topo,
+    };
+
+    // Create an overlay object to hold our overlay.
+    var overlayMaps = {
+      // Earthquakes: earthquakes,
+      //"Earthquakes": layers.quakes,
+      "Population per sq mi": pop_per_sq_mile,
+    };
+
+    L.control
+      .layers(baseMaps, overlayMaps, {
+        collapsed: false,
+      })
+      .addTo(myMap);
 
     // Adding the legend to the map
     legend.addTo(myMap);
