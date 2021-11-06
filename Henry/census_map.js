@@ -61,8 +61,8 @@ d3.csv(csvLocation).then(function (data) {
     geojson_house_comp = L.choropleth(jsonData, {
       valueProperty: "e_house_total",
 
-      scale: ["#ffffb2", "#06b100"],
-
+      scale: ["#D3D3D3", "#708090"],
+      
       steps: 10,
 
       mode: "q",
