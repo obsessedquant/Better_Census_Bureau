@@ -46,7 +46,7 @@ d3.csv(csvLocation).then(function (data) {
     geojson_mpop = L.choropleth(jsonData, {
       valueProperty: "mPop",
 
-      scale: ["#ffffb2", "#b10026"],
+      scale: ["#ffffb2", "#06b100"],
 
       steps: 10,
 
@@ -127,6 +127,7 @@ d3.csv(csvLocation).then(function (data) {
 
     var pop_legend = L.control({ position: "bottomright" });
     var pop_per_sq_mi_legend = L.control({ position: "bottomright" });
+    var per_mpop_legend = L.control({ position: "bottomright" });
 
     pop_legend.onAdd = function () {
       var div = L.DomUtil.create("div", "info legend");
@@ -157,6 +158,37 @@ d3.csv(csvLocation).then(function (data) {
       div.innerHTML += "<ul>" + labels.join("") + "</ul>";
       return div;
     };
+
+    per_mpop_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_mpop.options.limits;
+      var colors = geojson_mpop.options.colors;
+      var labels = [];
+
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>Population</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
+
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
+      });
+
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
+
 
     pop_per_sq_mi_legend.onAdd = function () {
       var div = L.DomUtil.create("div", "info legend");
@@ -221,6 +253,7 @@ d3.csv(csvLocation).then(function (data) {
     var layerToLegendMapping = {
       Population: pop_legend,
       "Population per sq mi": pop_per_sq_mi_legend,
+      "Percent of Minorities": per_mpop_legend,
     };
     function legendAdd(event) {
       var layername = event.name;
@@ -243,3 +276,64 @@ d3.csv(csvLocation).then(function (data) {
 //   zoomOffset: -1,
 //   accessToken: 'pk.eyJ1Ijoic3JvYmluc29uMjI2IiwiYSI6ImNrdmh4OGczdWFrMmsydW9mdGViZjB4enYifQ.M7SwNQspK272zHmaVqumdA'
 // }).addTo(myMap);
+
+// Hover feature
+  // function highlightFeature(e){
+  //   var layer = e.target;
+
+  //   layer.setStyle({
+  //     weight: 5,
+  //     color: '#666',
+  //     dashArray: '',
+  //     fillOpacity: 0.7
+  //   });
+
+  //   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+  //     layer.bringToFront();
+  //   }
+  // }
+
+  // function resetHignLight(e){
+  //   jsonData.resetStyle(e.target);
+  // }
+
+  // function zoomToFeature(e){
+  //   map.fitBounds(e.target.getBonunds());
+  // }
+
+  // function onEachFeature(feature, layer){
+  //   layer.on({
+  //     mouseover: highlightFeature,
+  //     mouseout: resetHignLight,
+  //     click: zoomToFeature,
+  //   });
+  // }
+
+  // geojson = L.geoJson(jsonData, {
+  //   style: style,
+  //   onEachFeature: onEachFeature
+  // }).addTo(map);
+
+  // var info = L.control();
+
+  // info.onAdd = function (map) {
+  //   this._div = L.DomUtil.create('div', 'info');
+  //   this.update();
+  //   return this._div;
+  // }
+
+  // info.update = function(props){
+  //   this._div.innerHTML = '<h4>Texas Population Census</h4>' + (props ?
+  //     '<b>' + props.LOCATION + '</b><b />' + props.mPop + 'people / mi<sup>2</sup>'
+  //     : 'Hover over an Area')
+  // };
+
+  // info.addTo(map)
+
+  // function highlightFeature(e){
+  //   info.update(layer.feature.properties);
+  // }
+
+  // function resetHignLight (e){
+  //   info.update();
+  // }
