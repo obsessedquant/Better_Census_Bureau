@@ -77,7 +77,7 @@ d3.csv(csvLocation).then(function (data) {
         layer.bindPopup(
           "Location:<br>" +
             feature.properties.LOCATION +
-            "<br><br>Percent Below Poverty<br>" +
+            "<br><br> Under 17, over 65, has disability, or single parent <br>" +
             Math.round(feature.properties.e_house_total)
         );
       },
@@ -281,13 +281,13 @@ d3.csv(csvLocation).then(function (data) {
 
     house_comp_legend.onAdd = function () {
       var div = L.DomUtil.create("div", "info legend");
-      var limits = geojson_pop.options.limits;
-      var colors = geojson_pop.options.colors;
+      var limits = geojson_house_comp.options.limits;
+      var colors = geojson_house_comp.options.colors;
       var labels = [];
 
       // Add the minimum and maximum.
       var legendInfo =
-        "<h1>Population</h1>" +
+        "<h1>Household composition</h1>" +
         '<div class="labels">' +
         '<div class="min">' +
         limits[0] +
