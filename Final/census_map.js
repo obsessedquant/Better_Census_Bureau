@@ -32,17 +32,129 @@ d3.csv(csvLocation).then(function (data) {
       x.properties.E_TOTPOP = +x.properties.E_TOTPOP;
       x.properties.AREA_SQMI = +x.properties.AREA_SQMI;
       x.properties.zPop = x.properties.E_TOTPOP / x.properties.AREA_SQMI;
+      x.properties.EP_POV = +x.properties.EP_POV;
+      x.properties.EP_UNEMP = +x.properties.EP_UNEMP;
+      x.properties.EP_PCI = +x.properties.EP_PCI;
+      x.properties.EP_NOHSDP = +x.properties.EP_NOHSDP;
       x.properties.E_MINRTY = +x.properties.E_MINRTY;
       x.properties.mPop = (x.properties.E_MINRTY / x.properties.E_TOTPOP) * 100;
     });
-    
+
     console.log("geoJsonLocation jsonData: ", jsonData.features);
 
     // Layer definition declarations
     var pop_per_sq_mile = new L.LayerGroup();
     var populationz = new L.LayerGroup();
+    var below_pov = new L.LayerGroup();
+    var unemploy = new L.LayerGroup();
+    var incomez = new L.LayerGroup();
+    var hi_school = new L.LayerGroup();
     var per_mpop = new L.LayerGroup();
-  
+
+    geojson_below_pov = L.choropleth(jsonData, {
+      valueProperty: "EP_POV",
+
+      scale: ["#ffffb2", "#06b100"],
+
+      steps: 10,
+
+      mode: "q",
+      style: {
+        // Border color
+        color: "#fff",
+        weight: 1,
+        fillOpacity: 0.8,
+      },
+
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(
+          "Location:<br>" +
+            feature.properties.LOCATION +
+            "<br><br>Percent Below Poverty<br>" +
+            Math.round(feature.properties.EP_POV)
+        );
+      },
+      // }).addTo(myMap);
+    }).addTo(below_pov);
+
+    geojson_unemploy = L.choropleth(jsonData, {
+      valueProperty: "EP_UNEMP",
+
+      scale: ["#ffffb2", "#06b100"],
+
+      steps: 10,
+
+      mode: "q",
+      style: {
+        // Border color
+        color: "#fff",
+        weight: 1,
+        fillOpacity: 0.8,
+      },
+
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(
+          "Location:<br>" +
+            feature.properties.LOCATION +
+            "<br><br>Percent of Unemployed<br>" +
+            Math.round(feature.properties.EP_UNEMP)
+        );
+      },
+      // }).addTo(myMap);
+    }).addTo(unemploy);
+
+    geojson_income = L.choropleth(jsonData, {
+      valueProperty: "EP_PCI",
+
+      scale: ["#ffffb2", "#06b100"],
+
+      steps: 10,
+
+      mode: "q",
+      style: {
+        // Border color
+        color: "#fff",
+        weight: 1,
+        fillOpacity: 0.8,
+      },
+
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(
+          "Location:<br>" +
+            feature.properties.LOCATION +
+            "<br><br>Percent of Income<br>" +
+            Math.round(feature.properties.EP_PCI)
+        );
+      },
+      // }).addTo(myMap);
+    }).addTo(incomez);
+
+    geojson_hi_school = L.choropleth(jsonData, {
+      valueProperty: "EP_NOHSDP",
+
+      scale: ["#ffffb2", "#06b100"],
+
+      steps: 10,
+
+      mode: "q",
+      style: {
+        // Border color
+        color: "#fff",
+        weight: 1,
+        fillOpacity: 0.8,
+      },
+
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup(
+          "Location:<br>" +
+            feature.properties.LOCATION +
+            "<br><br>Percent of No High School Diploma<br>" +
+            Math.round(feature.properties.EP_NOHSDP)
+        );
+      },
+      // }).addTo(myMap);
+    }).addTo(hi_school);
+
     geojson_mpop = L.choropleth(jsonData, {
       valueProperty: "mPop",
 
@@ -127,6 +239,10 @@ d3.csv(csvLocation).then(function (data) {
 
     var pop_legend = L.control({ position: "bottomright" });
     var pop_per_sq_mi_legend = L.control({ position: "bottomright" });
+    var below_pov_legend = L.control({ position: "bottomright" });
+    var unemploy_legend = L.control({ position: "bottomright" });
+    var income_legend = L.control({ position: "bottomright" });
+    var hi_school_legend = L.control({ position: "bottomright" });
     var per_mpop_legend = L.control({ position: "bottomright" });
 
     pop_legend.onAdd = function () {
@@ -138,6 +254,126 @@ d3.csv(csvLocation).then(function (data) {
       // Add the minimum and maximum.
       var legendInfo =
         "<h1>Population</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
+
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
+      });
+
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
+
+    below_pov_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_below_pov.options.limits;
+      var colors = geojson_below_pov.options.colors;
+      var labels = [];
+
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>Pct Below Poverty</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
+
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
+      });
+
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
+
+    unemploy_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_unemploy.options.limits;
+      var colors = geojson_unemploy.options.colors;
+      var labels = [];
+
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>Population</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
+
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
+      });
+
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
+
+    income_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_income.options.limits;
+      var colors = geojson_income.options.colors;
+      var labels = [];
+
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>Income</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
+
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
+      });
+
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
+
+    hi_school_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_hi_school.options.limits;
+      var colors = geojson_hi_school.options.colors;
+      var labels = [];
+
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>Pct No High School Diploma</h1>" +
         '<div class="labels">' +
         '<div class="min">' +
         limits[0] +
@@ -189,7 +425,6 @@ d3.csv(csvLocation).then(function (data) {
       return div;
     };
 
-
     pop_per_sq_mi_legend.onAdd = function () {
       var div = L.DomUtil.create("div", "info legend");
       var limits = geojson_pop_per_sq_mi.options.limits;
@@ -238,6 +473,10 @@ d3.csv(csvLocation).then(function (data) {
       //"Earthquakes": layers.quakes,
       Population: populationz,
       "Population per sq mi": pop_per_sq_mile,
+      "Pct Below Poverty": below_pov,
+      "Pct Unemployed": unemploy,
+      Income: incomez,
+      "Pct No High School Diploma": hi_school,
       "Percent of Minorities": per_mpop,
     };
 
@@ -253,6 +492,10 @@ d3.csv(csvLocation).then(function (data) {
     var layerToLegendMapping = {
       Population: pop_legend,
       "Population per sq mi": pop_per_sq_mi_legend,
+      "Pct Below Poverty": below_pov_legend,
+      "Pct Unemployed": unemploy_legend,
+      Income: income_legend,
+      "Pct No High School Diploma": hi_school_legend,
       "Percent of Minorities": per_mpop_legend,
     };
     function legendAdd(event) {
@@ -278,62 +521,62 @@ d3.csv(csvLocation).then(function (data) {
 // }).addTo(myMap);
 
 // Hover feature
-  // function highlightFeature(e){
-  //   var layer = e.target;
+// function highlightFeature(e){
+//   var layer = e.target;
 
-  //   layer.setStyle({
-  //     weight: 5,
-  //     color: '#666',
-  //     dashArray: '',
-  //     fillOpacity: 0.7
-  //   });
+//   layer.setStyle({
+//     weight: 5,
+//     color: '#666',
+//     dashArray: '',
+//     fillOpacity: 0.7
+//   });
 
-  //   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-  //     layer.bringToFront();
-  //   }
-  // }
+//   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+//     layer.bringToFront();
+//   }
+// }
 
-  // function resetHignLight(e){
-  //   jsonData.resetStyle(e.target);
-  // }
+// function resetHignLight(e){
+//   jsonData.resetStyle(e.target);
+// }
 
-  // function zoomToFeature(e){
-  //   map.fitBounds(e.target.getBonunds());
-  // }
+// function zoomToFeature(e){
+//   map.fitBounds(e.target.getBonunds());
+// }
 
-  // function onEachFeature(feature, layer){
-  //   layer.on({
-  //     mouseover: highlightFeature,
-  //     mouseout: resetHignLight,
-  //     click: zoomToFeature,
-  //   });
-  // }
+// function onEachFeature(feature, layer){
+//   layer.on({
+//     mouseover: highlightFeature,
+//     mouseout: resetHignLight,
+//     click: zoomToFeature,
+//   });
+// }
 
-  // geojson = L.geoJson(jsonData, {
-  //   style: style,
-  //   onEachFeature: onEachFeature
-  // }).addTo(map);
+// geojson = L.geoJson(jsonData, {
+//   style: style,
+//   onEachFeature: onEachFeature
+// }).addTo(map);
 
-  // var info = L.control();
+// var info = L.control();
 
-  // info.onAdd = function (map) {
-  //   this._div = L.DomUtil.create('div', 'info');
-  //   this.update();
-  //   return this._div;
-  // }
+// info.onAdd = function (map) {
+//   this._div = L.DomUtil.create('div', 'info');
+//   this.update();
+//   return this._div;
+// }
 
-  // info.update = function(props){
-  //   this._div.innerHTML = '<h4>Texas Population Census</h4>' + (props ?
-  //     '<b>' + props.LOCATION + '</b><b />' + props.mPop + 'people / mi<sup>2</sup>'
-  //     : 'Hover over an Area')
-  // };
+// info.update = function(props){
+//   this._div.innerHTML = '<h4>Texas Population Census</h4>' + (props ?
+//     '<b>' + props.LOCATION + '</b><b />' + props.mPop + 'people / mi<sup>2</sup>'
+//     : 'Hover over an Area')
+// };
 
-  // info.addTo(map)
+// info.addTo(map)
 
-  // function highlightFeature(e){
-  //   info.update(layer.feature.properties);
-  // }
+// function highlightFeature(e){
+//   info.update(layer.feature.properties);
+// }
 
-  // function resetHignLight (e){
-  //   info.update();
-  // }
+// function resetHignLight (e){
+//   info.update();
+// }
