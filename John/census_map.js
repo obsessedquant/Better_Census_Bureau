@@ -127,6 +127,7 @@ d3.csv(csvLocation).then(function (data) {
 
     var pop_legend = L.control({ position: "bottomright" });
     var pop_per_sq_mi_legend = L.control({ position: "bottomright" });
+    var per_mpop_legend = L.control({ position: "bottomright" });
 
     pop_legend.onAdd = function () {
       var div = L.DomUtil.create("div", "info legend");
@@ -157,6 +158,37 @@ d3.csv(csvLocation).then(function (data) {
       div.innerHTML += "<ul>" + labels.join("") + "</ul>";
       return div;
     };
+
+    per_mpop_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_mpop.options.limits;
+      var colors = geojson_mpop.options.colors;
+      var labels = [];
+
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>Population</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
+
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
+      });
+
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
+
 
     pop_per_sq_mi_legend.onAdd = function () {
       var div = L.DomUtil.create("div", "info legend");
@@ -221,6 +253,7 @@ d3.csv(csvLocation).then(function (data) {
     var layerToLegendMapping = {
       Population: pop_legend,
       "Population per sq mi": pop_per_sq_mi_legend,
+      "Percent of Minorities": per_mpop_legend,
     };
     function legendAdd(event) {
       var layername = event.name;
