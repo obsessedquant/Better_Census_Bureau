@@ -12,7 +12,8 @@ var topo = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
 });
 
 var geoJsonLocation = "48.geojson";
-var csvLocation = "SVI2018_US_small.csv";
+// var csvLocation = "SVI2018_US_small.csv";
+var csvLocation = "../Data/Texas_Houston.csv";
 
 d3.csv(csvLocation).then(function (data) {
   // console.log("csvLocation", data);
