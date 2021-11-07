@@ -21,19 +21,39 @@ E_SNGPNT
 
 3. Go to layer definition and create your layer
 
-   // layer definition declarations 
-
    Var house_comp = new l.layergroup():
+
+   copy a geojson definition and add your variables. This is the new choropleth for your data
 
 4. add a legend
 
+   1. create a new legend variable 
+   2. create a new .onadd section 
+
 5. add an overlay 
 
-   1. 
+   1. go to overlayMaps
+   2. add your overlay use the variable crated previously
 
-65, < 17, disabled
+6. Add a legend
 
-Age < 17, + Age > 65 + Disabled
+7. Under 17, over 65, has disability, or single parent
 
 
+
+config web server
+
+```
+# 1. create a new clean env
+# python -m venv <name>
+# 2. add this name to gitignore
+# 3. use git bash > source <name>/Scripts/activate
+# 4. conda deactivate
+# 5. pip freeze > make sure it's clean
+# 6. pip install dependencies > make sure you will have gunicorn
+# 7. make sure you create a db on heroku > make sure 'posgresql'
+# go to heroku website > go to app > Setting > create a new key for your correct DB link
+# 8. put this new var to your code
+# 9. python app.py on localhost
+```
 
