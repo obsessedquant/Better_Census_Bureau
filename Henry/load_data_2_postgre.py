@@ -15,10 +15,15 @@ load_dotenv()
 # Get the postgres connection information from os file. 
 
 
-DB_HOST = os.getenv('DB_HOST')
-DB_NAME = os.getenv('DB_NAME')
-DB_USER = os.getenv('postrgres_user')
-DB_PASS = os.getenv('postrgres_pass')
+# DB_HOST = os.getenv('DB_HOST')
+# DB_NAME = os.getenv('DB_NAME')
+# DB_USER = os.getenv('postrgres_user')
+# DB_PASS = os.getenv('postrgres_pass')
+
+DB_HOST = os.getenv('petpal_host')
+DB_NAME = os.getenv('petpal_dbname')
+DB_USER = os.getenv('petpal_user')
+DB_PASS = os.getenv('petpal_pass')
 
 # print(DB_PASS)
 
@@ -30,7 +35,7 @@ texas_df = pd.read_csv('../Data/Texas.csv',sep=',',lineterminator='\r',header=0,
 
 # # sqlachemy
 
-engine = create_engine(f'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/BCB')
+engine = create_engine(f'postgresql://{DB_USER}:{DB_PASS}@{DB_HOST}:5432/{DB_NAME}')
 
 # # load df to database
 SVI2018_df.to_sql('SVI2018_US',engine,index=False,if_exists='append')
