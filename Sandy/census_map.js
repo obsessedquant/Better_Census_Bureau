@@ -61,8 +61,6 @@ d3.csv(csvLocation).then(function (data) {
     var per_no_veh = new L.LayerGroup();
     var per_group_qtr = new L.LayerGroup();
 
-
-
     geojson_ten_or_more = L.choropleth(jsonData, {
       valueProperty: "E_MUNIT",
 
@@ -88,8 +86,6 @@ d3.csv(csvLocation).then(function (data) {
       },
       // }).addTo(myMap);
     }).addTo(per_ten_or_more);
-
-
 
     geojson_mob_est = L.choropleth(jsonData, {
       valueProperty: "E_MOBILE",
@@ -194,8 +190,6 @@ d3.csv(csvLocation).then(function (data) {
       },
       // }).addTo(myMap);
     }).addTo(per_group_qtr);
-
-
 
     geojson_below_pov = L.choropleth(jsonData, {
       valueProperty: "EP_POV",
@@ -391,14 +385,10 @@ d3.csv(csvLocation).then(function (data) {
     var hi_school_legend = L.control({ position: "bottomright" });
     var per_mpop_legend = L.control({ position: "bottomright" });
     var per_10_or_more_legend = L.control({ position: "bottomright" });
-    var per_mob_est = L.control({ position: "bottomright" });
-    var per_peo_per_rms = L.control({ position: "bottomright" });
-    var per_no_veh = L.control({ position: "bottomright" });
-    var per_group_qtr = L.control({ position: "bottomright" });
-
-
-
-
+    var per_mob_est_legend = L.control({ position: "bottomright" });
+    var per_peo_per_rms_legend = L.control({ position: "bottomright" });
+    var per_no_veh_legend = L.control({ position: "bottomright" });
+    var per_group_qtr_legend = L.control({ position: "bottomright" });
 
     per_10_or_more_legend.onAdd = function () {
       var div = L.DomUtil.create("div", "info legend");
@@ -430,8 +420,125 @@ d3.csv(csvLocation).then(function (data) {
       return div;
     };
 
+    per_mob_est_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_mob_est.options.limits;
+      var colors = geojson_mob_est.options.colors;
+      var labels = [];
 
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>10 =< Housing Units</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
 
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
+      });
+
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
+
+    per_peo_per_rms_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_peo_per_rms.options.limits;
+      var colors = geojson_peo_per_rms.options.colors;
+      var labels = [];
+
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>10 =< Housing Units</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
+
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
+      });
+
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
+
+    per_no_veh_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_no_veh.options.limits;
+      var colors = geojson_no_veh.options.colors;
+      var labels = [];
+
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>10 =< Housing Units</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
+
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
+      });
+
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
+
+    per_group_qtr_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_group_qtr.options.limits;
+      var colors = geojson_group_qtr.options.colors;
+      var labels = [];
+
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>10 =< Housing Units</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
+
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
+      });
+
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
 
     pop_legend.onAdd = function () {
       var div = L.DomUtil.create("div", "info legend");
@@ -666,7 +773,11 @@ d3.csv(csvLocation).then(function (data) {
       Income: incomez,
       "Pct No High School Diploma": hi_school,
       "Percent of Minorities": per_mpop,
-      "10 or more Housing Units" : per_ten_or_more
+      "10 or more Housing Units": per_ten_or_more,
+      "Mobile Homes": per_mob_est,
+      "Occupied Housing Units": per_peo_per_rms,
+      "No Vehicles": per_no_veh,
+      "Group Quarters": per_group_qtr,
     };
 
     L.control
@@ -686,12 +797,11 @@ d3.csv(csvLocation).then(function (data) {
       Income: income_legend,
       "Pct No High School Diploma": hi_school_legend,
       "Percent of Minorities": per_mpop_legend,
-      "10 or more Housing Units" : per_10_or_more_legend,
-      "Mobile Homes" : per_mob_est_legend,
-      "Occupied Housing Units" : per_peo_per_rms_legend,
-      "No Vehicle" : per_no_veh_legend,
-      "Persons in Group Quarters" : per_group_qtr_legend
-
+      "10 or more Housing Units": per_10_or_more_legend,
+      "Mobile Homes": per_mob_est_legend,
+      "Occupied Housing Units": per_peo_per_rms_legend,
+      "No Vehicle": per_no_veh_legend,
+      "Group Quarters": per_group_qtr_legend,
     };
     // .addTo(myMap);
 
@@ -716,64 +826,3 @@ d3.csv(csvLocation).then(function (data) {
 //   zoomOffset: -1,
 //   accessToken: 'pk.eyJ1Ijoic3JvYmluc29uMjI2IiwiYSI6ImNrdmh4OGczdWFrMmsydW9mdGViZjB4enYifQ.M7SwNQspK272zHmaVqumdA'
 // }).addTo(myMap);
-
-// Hover feature
-// function highlightFeature(e){
-//   var layer = e.target;
-
-//   layer.setStyle({
-//     weight: 5,
-//     color: '#666',
-//     dashArray: '',
-//     fillOpacity: 0.7
-//   });
-
-//   if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-//     layer.bringToFront();
-//   }
-// }
-
-// function resetHignLight(e){
-//   jsonData.resetStyle(e.target);
-// }
-
-// function zoomToFeature(e){
-//   map.fitBounds(e.target.getBonunds());
-// }
-
-// function onEachFeature(feature, layer){
-//   layer.on({
-//     mouseover: highlightFeature,
-//     mouseout: resetHignLight,
-//     click: zoomToFeature,
-//   });
-// }
-
-// geojson = L.geoJson(jsonData, {
-//   style: style,
-//   onEachFeature: onEachFeature
-// }).addTo(map);
-
-// var info = L.control();
-
-// info.onAdd = function (map) {
-//   this._div = L.DomUtil.create('div', 'info');
-//   this.update();
-//   return this._div;
-// }
-
-// info.update = function(props){
-//   this._div.innerHTML = '<h4>Texas Population Census</h4>' + (props ?
-//     '<b>' + props.LOCATION + '</b><b />' + props.mPop + 'people / mi<sup>2</sup>'
-//     : 'Hover over an Area')
-// };
-
-// info.addTo(map)
-
-// function highlightFeature(e){
-//   info.update(layer.feature.properties);
-// }
-
-// function resetHignLight (e){
-//   info.update();
-// }
