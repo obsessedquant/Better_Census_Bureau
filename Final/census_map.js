@@ -296,7 +296,7 @@ d3.csv(csvLocation).then(function (data) {
         layer.bindPopup(
           "Location:<br>" +
             feature.properties.LOCATION +
-            "<br><br>Percent of Income<br>" +
+            "<br><br>Per Capita Income<br>" +
             Math.round(feature.properties.EP_PCI)
         );
       },
@@ -514,7 +514,7 @@ d3.csv(csvLocation).then(function (data) {
       div.innerHTML += "<ul>" + labels.join("") + "</ul>";
       return div;
     };
-    
+
     per_peo_per_rms_legend.onAdd = function () {
       var div = L.DomUtil.create("div", "info legend");
       var limits = geojson_peo_per_rms.options.limits;
