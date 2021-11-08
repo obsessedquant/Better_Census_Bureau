@@ -43,7 +43,11 @@ d3.csv(csvLocation).then(function (data) {
       x.properties.E_AGE17 = +x.properties.E_AGE17;
       x.properties.E_DISABL = +x.properties.E_AGE65;
       x.properties.E_SNGPNT = +x.properties.E_SNGPNT;
-      x.properties.e_house_total = x.properties.E_AGE65 + x.properties.E_AGE17 + x.properties.E_DISABL + x.properties.E_SNGPNT;
+      x.properties.e_house_total =
+        x.properties.E_AGE65 +
+        x.properties.E_AGE17 +
+        x.properties.E_DISABL +
+        x.properties.E_SNGPNT;
       // housing
       x.properties.E_MUNIT = +x.properties.E_MUNIT;
       x.properties.E_MOBILE = +x.properties.E_MOBILE;
@@ -68,7 +72,7 @@ d3.csv(csvLocation).then(function (data) {
     var per_peo_per_rms = new L.LayerGroup();
     var per_no_veh = new L.LayerGroup();
     var per_group_qtr = new L.LayerGroup();
-    
+
     geojson_ten_or_more = L.choropleth(jsonData, {
       valueProperty: "E_MUNIT",
 
@@ -203,7 +207,7 @@ d3.csv(csvLocation).then(function (data) {
       valueProperty: "e_house_total",
 
       scale: ["#D3D3D3", "#708090"],
-      
+
       steps: 10,
 
       mode: "q",
@@ -545,7 +549,6 @@ d3.csv(csvLocation).then(function (data) {
       return div;
     };
 
-
     pop_legend.onAdd = function () {
       var div = L.DomUtil.create("div", "info legend");
       var limits = geojson_pop.options.limits;
@@ -756,6 +759,66 @@ d3.csv(csvLocation).then(function (data) {
       return div;
     };
 
+    per_no_veh_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_no_veh.options.limits;
+      var colors = geojson_no_veh.options.colors;
+      var labels = [];
+
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>Household without Vehicle</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
+
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
+      });
+
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
+
+    per_group_qtr_legend.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson_group_qtr.options.limits;
+      var colors = geojson_group_qtr.options.colors;
+      var labels = [];
+
+      // Add the minimum and maximum.
+      var legendInfo =
+        "<h1>Persons in Group Quarters</h1>" +
+        '<div class="labels">' +
+        '<div class="min">' +
+        limits[0] +
+        "</div>" +
+        '<div class="max">' +
+        Math.round(limits[limits.length - 1]) +
+        "</div>" +
+        "</div>";
+
+      div.innerHTML = legendInfo;
+
+      limits.forEach(function (limit, index) {
+        labels.push(
+          '<li style="background-color: ' + colors[index] + '"></li>'
+        );
+      });
+
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
+
     var myMap = L.map("map", {
       center: [29.7604, -95.3698],
       zoom: 12,
@@ -782,7 +845,7 @@ d3.csv(csvLocation).then(function (data) {
       "Mobile Homes": per_mob_est,
       "Occupied Housing Units": per_peo_per_rms,
       "No Vehicles": per_no_veh,
-      "Group Quarters": per_group_qtr
+      "Group Quarters": per_group_qtr,
     };
 
     L.control
@@ -806,8 +869,8 @@ d3.csv(csvLocation).then(function (data) {
       "10 or more Housing Units": per_10_or_more_legend,
       "Mobile Homes": per_mob_est_legend,
       "Occupied Housing Units": per_peo_per_rms_legend,
-      "No Vehicle": per_no_veh_legend,
-      "Group Quarters": per_group_qtr_legends
+      "No Vehicles": per_no_veh_legend,
+      "Group Quarters": per_group_qtr_legend,
     };
     function legendAdd(event) {
       var layername = event.name;
