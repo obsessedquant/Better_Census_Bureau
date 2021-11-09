@@ -68,7 +68,7 @@ d3.csv(csvLocation).then(function (data) {
         layer.bindPopup(
           // "Location:<br>" +
           feature.properties.STATE +
-            "<br><br>RPL1:<br>" +
+            "<br><br>Socioeconomic Status:<br>" +
             Math.round(feature.properties.RPL_THEME1)
         );
       },
@@ -111,7 +111,7 @@ d3.csv(csvLocation).then(function (data) {
         layer.bindPopup(
           // "Location:<br>" +
           feature.properties.STATE +
-            "<br><br>RPL2:<br>" +
+            "<br><br>Household Composition & Disability:<br>" +
             Math.round(feature.properties.RPL_THEME2)
         );
       },
@@ -137,7 +137,7 @@ d3.csv(csvLocation).then(function (data) {
         layer.bindPopup(
           // "Location:<br>" +
           feature.properties.STATE +
-            "<br><br>RPL3:<br>" +
+            "<br><br>Minority Status & Language:<br>" +
             Math.round(feature.properties.RPL_THEME3)
         );
       },
@@ -163,7 +163,7 @@ d3.csv(csvLocation).then(function (data) {
         layer.bindPopup(
           // "Location:<br>" +
           feature.properties.STATE +
-            "<br><br>RPL4:<br>" +
+            "<br><br>Housing Type & Transportation Ranking:<br>" +
             Math.round(feature.properties.RPL_THEME4)
         );
       },
@@ -189,7 +189,7 @@ d3.csv(csvLocation).then(function (data) {
         layer.bindPopup(
           // "Location:<br>" +
           feature.properties.STATE +
-            "<br><br>RPLS:<br>" +
+            "<br><br>Overall Ranking:<br>" +
             Math.round(feature.properties.RPL_THEMES)
         );
       },
@@ -218,7 +218,7 @@ d3.csv(csvLocation).then(function (data) {
 
       // Add the minimum and maximum.
       var legendInfo =
-        "<h1>RPL1</h1>" +
+        "<h1>Socioeconomic Status</h1>" +
         '<div class="labels">' +
         '<div class="min">' +
         limits[0] +
@@ -248,7 +248,7 @@ d3.csv(csvLocation).then(function (data) {
 
       // Add the minimum and maximum.
       var legendInfo =
-        "<h1>RPL2</h1>" +
+        "<h1>Household Composition & Disability</h1>" +
         '<div class="labels">' +
         '<div class="min">' +
         limits[0] +
@@ -278,7 +278,7 @@ d3.csv(csvLocation).then(function (data) {
 
       // Add the minimum and maximum.
       var legendInfo =
-        "<h1>RPL3</h1>" +
+        "<h1>Minority Status & Language</h1>" +
         '<div class="labels">' +
         '<div class="min">' +
         limits[0] +
@@ -308,7 +308,7 @@ d3.csv(csvLocation).then(function (data) {
 
       // Add the minimum and maximum.
       var legendInfo =
-        "<h1>RPL4</h1>" +
+        "<h1>Housing Type & Transportation</h1>" +
         '<div class="labels">' +
         '<div class="min">' +
         limits[0] +
@@ -338,7 +338,7 @@ d3.csv(csvLocation).then(function (data) {
 
       // Add the minimum and maximum.
       var legendInfo =
-        "<h1>RPLS</h1>" +
+        "<h1>Overall Ranking</h1>" +
         '<div class="labels">' +
         '<div class="min">' +
         limits[0] +
@@ -376,11 +376,11 @@ d3.csv(csvLocation).then(function (data) {
     var overlayMaps = {
       // Earthquakes: earthquakes,
       //"Earthquakes": layers.quakes,
-      RPL1: RPL1,
-      RPL2: RPL2,
-      RPL3: RPL3,
-      RPL4: RPL4,
-      RPLS: RPLS,
+      "Socioeconomic Status": RPL1,
+      "Household Composition & Disability": RPL2,
+      "Minority Status & Language": RPL3,
+      "Housing Type & Transportation": RPL4,
+      "Overall Ranking": RPLS,
     };
 
     L.control
@@ -393,11 +393,11 @@ d3.csv(csvLocation).then(function (data) {
     RPL1_legend.addTo(myMap);
 
     var layerToLegendMapping = {
-      RPL1: RPL1_legend,
-      RPL2: RPL2_legend,
-      RPL3: RPL3_legend,
-      RPL4: RPL4_legend,
-      RPLS: RPLS_legend,
+      "Socioeconomic Status": RPL1_legend,
+      "Household Composition & Disability": RPL2_legend,
+      "Minority Status & Language": RPL3_legend,
+      "Housing Type & Transportation": RPL4_legend,
+      "Overall Ranking": RPLS_legend,
     };
     function legendAdd(event) {
       var layername = event.name;
